@@ -35,3 +35,6 @@ juntos-*.tar
 npm-debug.log
 /assets/node_modules/
 
+juntos_*.db*
+firebase-debug.log
+priv/svelte/

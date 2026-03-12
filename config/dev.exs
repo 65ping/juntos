@@ -1,14 +1,14 @@
 import Config
 
-# Configure your database
+# Configure your database (SQLite for dev)
 config :juntos, Juntos.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "juntos_dev",
+  adapter: Ecto.Adapters.SQLite3,
+  database: Path.expand("../juntos_dev.db", Path.dirname(__ENV__.file)),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
+
+config :juntos, :ash_domains, [Juntos.Accounts, Juntos.Core]
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -25,7 +25,7 @@ config :juntos, JuntosWeb.Endpoint,
   debug_errors: true,
   secret_key_base: "3hl3gHQi+GfGbobxc0pU9/7r6b2izXNBqCRBbbHaCoWIra0R0QQwKKYVBfPsnp0A",
   watchers: [
-    esbuild: {Esbuild, :install_and_run, [:juntos, ~w(--sourcemap=inline --watch)]},
+    node: ["build.js", "--watch", cd: Path.expand("../assets", __DIR__)],
     tailwind: {Tailwind, :install_and_run, [:juntos, ~w(--watch)]}
   ]
 
@@ -63,7 +63,9 @@ config :juntos, JuntosWeb.Endpoint,
       ~r"priv/gettext/.*\.po$",
       # Router, Controllers, LiveViews and LiveComponents
       ~r"lib/juntos_web/router\.ex$",
-      ~r"lib/juntos_web/(controllers|live|components)/.*\.(ex|heex)$"
+      ~r"lib/juntos_web/(controllers|live|components)/.*\.(ex|heex)$",
+      # Svelte components
+      ~r"assets/svelte/.*\.svelte$"
     ]
   ]
 

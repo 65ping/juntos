@@ -41,17 +41,42 @@ defmodule Juntos.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      # Dev tooling
       {:usage_rules, "~> 1.0", only: [:dev]},
       {:igniter, "~> 0.6", only: [:dev, :test]},
+
+      # Core Phoenix
       {:phoenix, "~> 1.8.5"},
       {:phoenix_ecto, "~> 4.5"},
-      {:ecto_sql, "~> 3.13"},
-      {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 1.1.0"},
-      {:lazy_html, ">= 0.1.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.8.3"},
+      {:lazy_html, ">= 0.1.0", only: :test},
+      {:swoosh, "~> 1.16"},
+      {:req, "~> 0.5"},
+      {:telemetry_metrics, "~> 1.0"},
+      {:telemetry_poller, "~> 1.0"},
+      {:gettext, "~> 1.0"},
+      {:jason, "~> 1.2"},
+      {:dns_cluster, "~> 0.2.0"},
+      {:bandit, "~> 1.5"},
+      {:plug, "~> 1.19"},
+
+      # Ash ecosystem
+      {:ash, "~> 3.0"},
+      {:ash_phoenix, "~> 2.0"},
+      {:ash_authentication, "~> 4.0"},
+      {:ash_authentication_phoenix, "~> 2.0"},
+
+      # Database
+      {:ash_sqlite, "~> 0.2"},
+      {:ecto_sqlite3, "~> 0.17"},
+      {:ash_postgres, "~> 2.0"},
+      {:postgrex, ">= 0.0.0"},
+
+      # UI
+      {:live_svelte, "~> 0.14"},
       {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
       {:heroicons,
@@ -61,14 +86,21 @@ defmodule Juntos.MixProject do
        app: false,
        compile: false,
        depth: 1},
-      {:swoosh, "~> 1.16"},
-      {:req, "~> 0.5"},
-      {:telemetry_metrics, "~> 1.0"},
-      {:telemetry_poller, "~> 1.0"},
-      {:gettext, "~> 1.0"},
-      {:jason, "~> 1.2"},
-      {:dns_cluster, "~> 0.2.0"},
-      {:bandit, "~> 1.5"}
+
+      # Background jobs
+      {:oban, "~> 2.19"},
+      {:ash_oban, "~> 0.3"},
+
+      # MCP / AI tooling (dev only)
+      {:tidewave, "~> 0.1", only: :dev},
+
+      # Static analysis
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+
+      # Test helpers
+      {:ex_machina, "~> 2.8", only: :test},
+      {:mox, "~> 1.0", only: :test},
+      {:bypass, "~> 2.1", only: :test}
     ]
   end
 
@@ -84,11 +116,11 @@ defmodule Juntos.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["compile", "tailwind juntos", "esbuild juntos"],
+      "assets.setup": ["tailwind.install --if-missing", "cmd --cd assets npm install"],
+      "assets.build": ["compile", "tailwind juntos", "cmd --cd assets node build.js"],
       "assets.deploy": [
         "tailwind juntos --minify",
-        "esbuild juntos --minify",
+        "cmd --cd assets node build.js --deploy",
         "phx.digest"
       ],
       precommit: ["compile --warnings-as-errors", "deps.unlock --unused", "format", "test"]

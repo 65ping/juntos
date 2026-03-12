@@ -1,0 +1,23 @@
+{
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^6.2.4",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/svelte": "^5.3.1",
+    "esbuild": "^0.27.3",
+    "esbuild-plugin-import-glob": "^0.1.1",
+    "esbuild-svelte": "^0.9.4",
+    "jsdom": "^28.1.0",
+    "svelte": "^5.53.10",
+    "svelte-preprocess": "^6.0.3",
+    "vitest": "^4.0.18"
+  },
+  "dependencies": {
+    "live_svelte": "file:../deps/live_svelte",
+    "phoenix": "file:../deps/phoenix",
+    "phoenix_html": "file:../deps/phoenix_html",
+    "phoenix_live_view": "file:../deps/phoenix_live_view"
+  }
+}

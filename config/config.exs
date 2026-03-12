@@ -9,7 +9,15 @@ import Config
 
 config :juntos,
   ecto_repos: [Juntos.Repo],
-  generators: [timestamp_type: :utc_datetime]
+  generators: [timestamp_type: :utc_datetime],
+  ash_domains: [Juntos.Accounts, Juntos.Core]
+
+config :juntos, Juntos.Repo, pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+
+config :juntos, Oban,
+  repo: Juntos.Repo,
+  plugins: [Oban.Plugins.Pruner],
+  queues: [default: 10, mailers: 5]
 
 # Configure the endpoint
 config :juntos, JuntosWeb.Endpoint,
@@ -31,15 +39,9 @@ config :juntos, JuntosWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :juntos, Juntos.Mailer, adapter: Swoosh.Adapters.Local
 
-# Configure esbuild (the version is required)
-config :esbuild,
-  version: "0.25.4",
-  juntos: [
-    args:
-      ~w(js/app.js --bundle --target=es2022 --outdir=../priv/static/assets/js --external:/fonts/* --external:/images/* --alias:@=.),
-    cd: Path.expand("../assets", __DIR__),
-    env: %{"NODE_PATH" => [Path.expand("../deps", __DIR__), Mix.Project.build_path()]}
-  ]
+# esbuild version still needed by the Elixir esbuild package (used for dep watchers)
+# JS bundling itself is handled via assets/build.js (required for live_svelte plugins)
+config :esbuild, :version, "0.25.4"
 
 # Configure tailwind (the version is required)
 config :tailwind,
