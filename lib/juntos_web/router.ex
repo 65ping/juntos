@@ -18,6 +18,7 @@ defmodule JuntosWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live "/tictactoe", TictactoeLive
   end
 
   # Other scopes may use custom stacks.
