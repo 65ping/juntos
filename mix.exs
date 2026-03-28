@@ -12,7 +12,21 @@ defmodule Juntos.MixProject do
       deps: deps(),
       compilers: [:phoenix_live_view] ++ Mix.compilers(),
       usage_rules: usage_rules(),
-      listeners: [Phoenix.CodeReloader]
+      listeners: [Phoenix.CodeReloader],
+      test_coverage: [
+        ignore_modules: [
+          # Auto-generated Ash protocol implementations
+          ~r/^Inspect\./,
+          # Pure DSL macro config — no callable functions
+          JuntosWeb.AuthOverrides,
+          # Browser-only test support (Playwright sessions)
+          JuntosWeb.E2ECase,
+          # ExMachina test factory
+          Juntos.Factory,
+          # EEx-compiled templates (embed_templates generates from files)
+          JuntosWeb.PageHTML
+        ]
+      ]
     ]
   end
 
