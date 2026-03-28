@@ -5,7 +5,7 @@ defmodule JuntosWeb.TelemetryTest do
     test "returns a non-empty list of telemetry metrics" do
       metrics = JuntosWeb.Telemetry.metrics()
       assert is_list(metrics)
-      assert length(metrics) > 0
+      assert metrics != []
     end
 
     test "includes Phoenix endpoint metrics" do
