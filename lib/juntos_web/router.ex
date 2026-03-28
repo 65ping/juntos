@@ -1,5 +1,6 @@
 defmodule JuntosWeb.Router do
   use JuntosWeb, :router
+  use AshAuthentication.Phoenix.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -8,6 +9,7 @@ defmodule JuntosWeb.Router do
     plug :put_root_layout, html: {JuntosWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :load_from_session
   end
 
   pipeline :api do
@@ -19,6 +21,11 @@ defmodule JuntosWeb.Router do
 
     get "/", PageController, :home
     live "/tictactoe", TictactoeLive
+
+    sign_in_route(register_path: "/register", reset_path: "/reset")
+    sign_out_route(AuthController)
+    auth_routes(AuthController, Juntos.Accounts.User)
+    reset_route([])
   end
 
   # Other scopes may use custom stacks.

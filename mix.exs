@@ -70,8 +70,6 @@ defmodule Juntos.MixProject do
       {:ash_authentication_phoenix, "~> 2.0"},
 
       # Database
-      {:ash_sqlite, "~> 0.2"},
-      {:ecto_sqlite3, "~> 0.17"},
       {:ash_postgres, "~> 2.0"},
       {:postgrex, ">= 0.0.0"},
 

@@ -1,10 +1,10 @@
 defmodule Juntos.Accounts.User do
   use Ash.Resource,
     domain: Juntos.Accounts,
-    data_layer: AshSqlite.DataLayer,
+    data_layer: AshPostgres.DataLayer,
     extensions: [AshAuthentication]
 
-  sqlite do
+  postgres do
     table("users")
     repo(Juntos.Repo)
   end
@@ -22,5 +22,25 @@ defmodule Juntos.Accounts.User do
 
   actions do
     defaults([:read, :destroy])
+  end
+
+  authentication do
+    strategies do
+      magic_link do
+        identity_field(:email)
+        sender(Juntos.Accounts.User.Senders.SendMagicLink)
+        require_interaction? :true
+      end
+    end
+
+    tokens do
+      enabled?(true)
+      token_resource(Juntos.Accounts.Token)
+      require_token_presence_for_authentication? true
+
+      signing_secret(fn _, _ ->
+        Application.fetch_env(:juntos, :token_signing_secret)
+      end)
+    end
   end
 end

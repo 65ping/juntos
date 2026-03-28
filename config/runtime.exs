@@ -57,6 +57,11 @@ if config_env() == :prod do
 
   config :juntos, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
+  config :juntos,
+         :token_signing_secret,
+         System.get_env("TOKEN_SIGNING_SECRET") ||
+           raise("environment variable TOKEN_SIGNING_SECRET is missing")
+
   config :juntos, JuntosWeb.Endpoint,
     url: [host: host, port: 443, scheme: "https"],
     http: [

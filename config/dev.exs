@@ -1,9 +1,10 @@
 import Config
 
-# Configure your database (SQLite for dev)
 config :juntos, Juntos.Repo,
-  adapter: Ecto.Adapters.SQLite3,
-  database: Path.expand("../juntos_dev.db", Path.dirname(__ENV__.file)),
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost",
+  database: "juntos_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

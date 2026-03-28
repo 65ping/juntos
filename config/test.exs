@@ -1,9 +1,10 @@
 import Config
 
-# Configure your database (SQLite for test)
 config :juntos, Juntos.Repo,
-  adapter: Ecto.Adapters.SQLite3,
-  database: Path.expand("../juntos_test.db", Path.dirname(__ENV__.file)),
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost",
+  database: "juntos_test",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2
 

@@ -8,13 +8,26 @@ on:
 
 env:
   MIX_ENV: test
-  ELIXIR_VERSION: "1.16"
-  OTP_VERSION: "26"
+  ELIXIR_VERSION: "1.20"
+  OTP_VERSION: "28"
 
 jobs:
   test:
     name: Build & Test
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - uses: actions/checkout@v4

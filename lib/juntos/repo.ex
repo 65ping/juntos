@@ -1,11 +1,11 @@
 defmodule Juntos.Repo do
-  use AshSqlite.Repo, otp_app: :juntos
+  use AshPostgres.Repo, otp_app: :juntos
+
+  def min_pg_version do
+    %Version{major: 18, minor: 0, patch: 0}
+  end
 
   def installed_extensions do
-    if Application.get_env(:juntos, __MODULE__)[:adapter] == Ecto.Adapters.SQLite3 do
-      []
-    else
-      ["uuid-ossp", "citext"]
-    end
+    ["ash-functions", "uuid-ossp", "citext"]
   end
 end

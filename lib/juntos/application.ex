@@ -14,6 +14,7 @@ defmodule Juntos.Application do
       {Phoenix.PubSub, name: Juntos.PubSub},
       # Start a worker by calling: Juntos.Worker.start_link(arg)
       # {Juntos.Worker, arg},
+      {Oban, Application.fetch_env!(:juntos, Oban)},
       # Start to serve requests, typically the last entry
       JuntosWeb.Endpoint
     ]

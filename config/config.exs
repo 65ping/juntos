@@ -14,6 +14,8 @@ config :juntos,
 
 config :juntos, Juntos.Repo, pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 
+config :juntos, :token_signing_secret, "dev-token-signing-secret-change-in-prod"
+
 config :juntos, Oban,
   repo: Juntos.Repo,
   plugins: [Oban.Plugins.Pruner],
