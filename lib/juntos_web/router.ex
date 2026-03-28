@@ -7,6 +7,7 @@ defmodule JuntosWeb.Router do
     plug :fetch_session
     plug :fetch_live_flash
     plug :put_root_layout, html: {JuntosWeb.Layouts, :root}
+    plug :put_layout, html: {JuntosWeb.Layouts, :app}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :load_from_session
@@ -20,17 +21,29 @@ defmodule JuntosWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-    live "/tictactoe", TictactoeLive
 
     sign_in_route(
       register_path: "/register",
       reset_path: "/reset",
-      overrides: [JuntosWeb.AuthOverrides]
+      overrides: [JuntosWeb.AuthOverrides],
+      auth_routes_prefix: "/auth"
     )
 
     sign_out_route(AuthController)
     auth_routes(AuthController, Juntos.Accounts.User)
     reset_route([])
+
+    ash_authentication_live_session :authenticated,
+      layout: {JuntosWeb.Layouts, :app},
+      on_mount: [{JuntosWeb.RequireAuth, :default}] do
+      live "/dashboard", DashboardLive
+    end
+
+    ash_authentication_live_session :public,
+      layout: {JuntosWeb.Layouts, :app} do
+      live "/tictactoe", TictactoeLive
+      live "/:slug", ConferenceLive
+    end
   end
 
   # Other scopes may use custom stacks.

@@ -8,6 +8,7 @@ defmodule JuntosWeb.TictactoeLiveTest do
       {:ok, view, html} = live(conn, ~p"/tictactoe")
 
       assert html =~ "TicTacToe"
+
       assert %{board: board, current_player: "x", status: :playing, winner: nil} =
                get_assigns(view)
 

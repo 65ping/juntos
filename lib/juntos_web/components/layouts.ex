@@ -27,11 +27,8 @@ defmodule JuntosWeb.Layouts do
   """
   attr :flash, :map, required: true, doc: "the map of flash messages"
 
-  attr :current_scope, :map,
-    default: nil,
-    doc: "the current [scope](https://hexdocs.pm/phoenix/scopes.html)"
-
-  slot :inner_block, required: true
+  attr :current_user, :map, default: nil
+  attr :inner_content, :any, default: nil
 
   def app(assigns) do
     ~H"""
@@ -46,10 +43,16 @@ defmodule JuntosWeb.Layouts do
 
       <div class="flex items-center gap-3">
         <.theme_toggle />
-        <%= if @current_scope do %>
+        <%= if @current_user do %>
+          <a
+            href={~p"/dashboard"}
+            class="text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors px-3 py-1.5 rounded-md hover:bg-stone-100"
+          >
+            Dashboard
+          </a>
           <a
             href={~p"/sign-out"}
-            class="text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors px-3 py-1.5 rounded-md hover:bg-stone-100"
+            class="text-sm font-medium text-stone-500 hover:text-stone-700 transition-colors px-3 py-1.5 rounded-md hover:bg-stone-100"
           >
             Sign out
           </a>
@@ -65,7 +68,7 @@ defmodule JuntosWeb.Layouts do
     </header>
 
     <main>
-      {render_slot(@inner_block)}
+      {@inner_content}
     </main>
 
     <.flash_group flash={@flash} />

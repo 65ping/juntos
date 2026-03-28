@@ -1,0 +1,224 @@
+<script>
+  let { conferences = [], live } = $props();
+
+  let conferenceList = $state.raw(conferences);
+
+  $effect(() => {
+    conferenceList = conferences;
+  });
+
+  let showForm = $state(false);
+  let name = $state("");
+  let description = $state("");
+  let location = $state("");
+  let startsAt = $state("");
+  let submitting = $state(false);
+
+  function resetForm() {
+    name = "";
+    description = "";
+    location = "";
+    startsAt = "";
+    showForm = false;
+    submitting = false;
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!name.trim()) return;
+    submitting = true;
+    live.pushEvent(
+      "create_conference",
+      { conference: { name, description, location, starts_at: startsAt } },
+      () => resetForm()
+    );
+  }
+
+  function deleteConference(id, conferenceName) {
+    if (!confirm(`Delete "${conferenceName}"? This cannot be undone.`)) return;
+    live.pushEvent("delete_conference", { id });
+  }
+
+  function statusLabel(status) {
+    const labels = {
+      draft: "Draft",
+      cfp_open: "CFP Open",
+      cfp_closed: "CFP Closed",
+      scheduled: "Scheduled",
+      complete: "Complete",
+    };
+    return labels[status] ?? status;
+  }
+
+  function statusClasses(status) {
+    const classes = {
+      draft: "bg-stone-100 text-stone-500",
+      cfp_open: "bg-emerald-50 text-emerald-700",
+      cfp_closed: "bg-sky-50 text-sky-700",
+      scheduled: "bg-amber-50 text-amber-700",
+      complete: "bg-stone-100 text-stone-500",
+    };
+    return classes[status] ?? "bg-stone-100 text-stone-500";
+  }
+</script>
+
+<div>
+  <div class="flex items-center justify-between mb-10">
+    <h1
+      style="font-family: var(--font-display);"
+      class="text-3xl text-stone-900 tracking-tight"
+    >
+      My Conferences
+    </h1>
+    <button
+      onclick={() => (showForm = true)}
+      class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-500 rounded-lg shadow-sm transition-all hover:-translate-y-px"
+    >
+      New conference <span aria-hidden="true">+</span>
+    </button>
+  </div>
+
+  {#if showForm}
+    <div class="glass-card p-6 mb-8">
+      <div class="flex items-center justify-between mb-6">
+        <h2
+          style="font-family: var(--font-display);"
+          class="text-xl text-stone-900"
+        >
+          New Conference
+        </h2>
+        <button
+          onclick={resetForm}
+          class="text-stone-400 hover:text-stone-600 transition-colors"
+          aria-label="Close"
+        >
+          ✕
+        </button>
+      </div>
+
+      <form onsubmit={handleSubmit}>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div class="sm:col-span-2">
+            <label class="block text-sm font-medium text-stone-700 mb-1.5" for="conf-name">
+              Conference name
+            </label>
+            <input
+              id="conf-name"
+              type="text"
+              bind:value={name}
+              placeholder="ElixirConf 2026"
+              required
+              class="w-full px-3 py-2 text-sm border border-stone-300 rounded-lg focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-colors"
+            />
+          </div>
+
+          <div class="sm:col-span-2">
+            <label class="block text-sm font-medium text-stone-700 mb-1.5" for="conf-desc">
+              Description <span class="text-stone-400 font-normal">(optional)</span>
+            </label>
+            <textarea
+              id="conf-desc"
+              bind:value={description}
+              rows="3"
+              placeholder="A short description of your conference…"
+              class="w-full px-3 py-2 text-sm border border-stone-300 rounded-lg focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-colors resize-none"
+            ></textarea>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-stone-700 mb-1.5" for="conf-location">
+              Location <span class="text-stone-400 font-normal">(optional)</span>
+            </label>
+            <input
+              id="conf-location"
+              type="text"
+              bind:value={location}
+              placeholder="Austin, TX"
+              class="w-full px-3 py-2 text-sm border border-stone-300 rounded-lg focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-colors"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-stone-700 mb-1.5" for="conf-starts">
+              Start date <span class="text-stone-400 font-normal">(optional)</span>
+            </label>
+            <input
+              id="conf-starts"
+              type="date"
+              bind:value={startsAt}
+              class="w-full px-3 py-2 text-sm border border-stone-300 rounded-lg focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-colors"
+            />
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3 mt-6">
+          <button
+            type="button"
+            onclick={resetForm}
+            class="px-4 py-2 text-sm font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={submitting}
+            class="px-5 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-500 rounded-lg shadow-sm transition-all hover:-translate-y-px disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+          >
+            {submitting ? "Creating…" : "Create conference"}
+          </button>
+        </div>
+      </form>
+    </div>
+  {/if}
+
+  {#if conferenceList.length === 0}
+    <div class="text-center py-20 text-stone-400">
+      <p style="font-family: var(--font-display);" class="text-2xl mb-2">
+        No conferences yet
+      </p>
+      <p class="text-sm">Create your first conference above.</p>
+    </div>
+  {:else}
+    <div class="space-y-3">
+      {#each conferenceList as conference (conference.id)}
+        <div class="glass-card px-6 py-5 flex items-center justify-between gap-4">
+          <div class="flex items-center gap-4 min-w-0">
+            <span
+              class="inline-block px-2.5 py-1 text-xs font-semibold uppercase tracking-widest rounded-full shrink-0 {statusClasses(conference.status)}"
+            >
+              {statusLabel(conference.status)}
+            </span>
+            <div class="min-w-0">
+              <a
+                href="/{conference.slug}"
+                class="font-medium text-stone-900 hover:text-amber-700 transition-colors truncate block"
+              >
+                {conference.name}
+              </a>
+              {#if conference.location}
+                <p class="text-xs text-stone-400 mt-0.5">{conference.location}</p>
+              {/if}
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 shrink-0">
+            <a
+              href="/{conference.slug}"
+              class="p-2 text-stone-400 hover:text-stone-600 hover:bg-stone-100 rounded-md transition-colors"
+              title="View public page"
+            >
+              ↗
+            </a>
+            <button
+              onclick={() => deleteConference(conference.id, conference.name)}
+              class="p-2 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+              title="Delete conference"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      {/each}
+    </div>
+  {/if}
+</div>

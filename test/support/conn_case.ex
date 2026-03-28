@@ -19,12 +19,10 @@ defmodule JuntosWeb.ConnCase do
 
   using do
     quote do
-      # The default endpoint for testing
       @endpoint JuntosWeb.Endpoint
 
       use JuntosWeb, :verified_routes
 
-      # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
       import JuntosWeb.ConnCase
@@ -34,5 +32,49 @@ defmodule JuntosWeb.ConnCase do
   setup tags do
     Juntos.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
+  end
+
+  @doc """
+  Creates a user via Ash.Seed (bypasses actions — no email sent).
+  """
+  def create_user(attrs \\ %{}) do
+    email = Map.get(attrs, :email, "user#{System.unique_integer([:positive])}@example.com")
+    Ash.Seed.seed!(Juntos.Accounts.User, %{email: email})
+  end
+
+  @doc """
+  Logs a user into the conn by generating a session token and storing it.
+
+  Works with `live/2` in LiveView tests: the token is placed in the Phoenix
+  session and the `ash_authentication_live_session` on_mount hook finds it,
+  verifies it against the DB, and assigns `current_user` to the socket.
+  """
+  def log_in_user(conn, user) do
+    {:ok, token, _claims} = AshAuthentication.Jwt.token_for_user(user)
+    user = Map.update!(user, :__metadata__, &Map.put(&1, :token, token))
+
+    conn
+    |> Phoenix.ConnTest.init_test_session(%{})
+    |> AshAuthentication.Plug.Helpers.store_in_session(user)
+  end
+
+  @doc """
+  Creates a conference owned by the given user.
+  """
+  def create_conference(user, attrs \\ %{}) do
+    idx = System.unique_integer([:positive])
+
+    Ash.create!(
+      Juntos.Core.Conference,
+      Map.merge(
+        %{
+          name: "Conference #{idx}",
+          slug: "conference-#{idx}",
+          organizer_id: user.id
+        },
+        attrs
+      ),
+      action: :create
+    )
   end
 end

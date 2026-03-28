@@ -29,14 +29,15 @@ defmodule Juntos.Accounts.User do
       magic_link do
         identity_field(:email)
         sender(Juntos.Accounts.User.Senders.SendMagicLink)
-        require_interaction? :true
+        require_interaction?(false)
       end
     end
 
     tokens do
       enabled?(true)
       token_resource(Juntos.Accounts.Token)
-      require_token_presence_for_authentication? true
+      store_all_tokens?(true)
+      require_token_presence_for_authentication?(true)
 
       signing_secret(fn _, _ ->
         Application.fetch_env(:juntos, :token_signing_secret)
