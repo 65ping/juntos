@@ -25,6 +25,10 @@ defmodule JuntosWeb.Endpoint do
     plug Tidewave
   end
 
+  if Application.compile_env(:juntos, :sql_sandbox) do
+    plug Phoenix.Ecto.SQL.Sandbox
+  end
+
   plug Plug.Static,
     at: "/",
     from: :juntos,

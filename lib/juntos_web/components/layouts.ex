@@ -35,37 +35,37 @@ defmodule JuntosWeb.Layouts do
 
   def app(assigns) do
     ~H"""
-    <header class="navbar px-4 sm:px-6 lg:px-8">
-      <div class="flex-1">
-        <a href="/" class="flex-1 flex w-fit items-center gap-2">
-          <img src={~p"/images/logo.svg"} width="36" />
-          <span class="text-sm font-semibold">v{Application.spec(:phoenix, :vsn)}</span>
-        </a>
-      </div>
-      <div class="flex-none">
-        <ul class="flex flex-column px-1 space-x-4 items-center">
-          <li>
-            <a href="https://phoenixframework.org/" class="btn btn-ghost">Website</a>
-          </li>
-          <li>
-            <a href="https://github.com/phoenixframework/phoenix" class="btn btn-ghost">GitHub</a>
-          </li>
-          <li>
-            <.theme_toggle />
-          </li>
-          <li>
-            <a href="https://hexdocs.pm/phoenix/overview.html" class="btn btn-primary">
-              Get Started <span aria-hidden="true">&rarr;</span>
-            </a>
-          </li>
-        </ul>
+    <header class="sticky top-0 z-50 px-6 py-4 flex items-center justify-between border-b border-stone-200 glass-card rounded-none">
+      <a href="/" class="flex items-center gap-2 group">
+        <span style="font-family: var(--font-display);" class="text-xl text-stone-900 tracking-tight">
+          Juntos
+        </span>
+        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 mb-0.5 group-hover:bg-amber-400 transition-colors">
+        </span>
+      </a>
+
+      <div class="flex items-center gap-3">
+        <.theme_toggle />
+        <%= if @current_scope do %>
+          <a
+            href={~p"/sign-out"}
+            class="text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors px-3 py-1.5 rounded-md hover:bg-stone-100"
+          >
+            Sign out
+          </a>
+        <% else %>
+          <a
+            href={~p"/sign-in"}
+            class="text-sm font-medium text-white bg-amber-600 hover:bg-amber-500 transition-colors px-4 py-2 rounded-md shadow-sm"
+          >
+            Sign in
+          </a>
+        <% end %>
       </div>
     </header>
 
-    <main class="px-4 py-20 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl space-y-4">
-        {render_slot(@inner_block)}
-      </div>
+    <main>
+      {render_slot(@inner_block)}
     </main>
 
     <.flash_group flash={@flash} />

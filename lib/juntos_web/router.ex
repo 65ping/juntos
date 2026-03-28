@@ -22,7 +22,12 @@ defmodule JuntosWeb.Router do
     get "/", PageController, :home
     live "/tictactoe", TictactoeLive
 
-    sign_in_route(register_path: "/register", reset_path: "/reset")
+    sign_in_route(
+      register_path: "/register",
+      reset_path: "/reset",
+      overrides: [JuntosWeb.AuthOverrides]
+    )
+
     sign_out_route(AuthController)
     auth_routes(AuthController, Juntos.Accounts.User)
     reset_route([])
