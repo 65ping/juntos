@@ -74,8 +74,8 @@ jobs:
 
       - name: Copy built assets into _build/test priv
         run: |
-          cp -r priv/svelte/ _build/test/lib/juntos/priv/svelte/
-          cp -r priv/static/assets/ _build/test/lib/juntos/priv/static/assets/
+          cp -r priv/svelte/. _build/test/lib/juntos/priv/svelte/
+          cp -r priv/static/assets/. _build/test/lib/juntos/priv/static/assets/
 
       - name: Restore Playwright browsers cache
         uses: actions/cache@v4
