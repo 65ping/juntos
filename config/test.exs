@@ -8,12 +8,15 @@ config :juntos, Juntos.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2
 
-# We don't run a server during test. If one is required,
-# you can enable the server option below.
 config :juntos, JuntosWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
   secret_key_base: "3VtRhkMx7bIoQ2DcQ6DYDPqMA5cfP1ZcispCfJVfhvfsg/j9uSG861IftGgkWHmj",
-  server: false
+  server: true
+
+config :phoenix_test,
+  otp_app: :juntos,
+  endpoint: JuntosWeb.Endpoint,
+  base_url: "http://localhost:4002"
 
 # In test we don't send emails
 config :juntos, Juntos.Mailer, adapter: Swoosh.Adapters.Test

@@ -763,7 +763,50 @@ Create this file. It is automatically read by Claude Code to govern behaviour in
 - Use `Phoenix.LiveViewTest` for LiveView tests.
 - Use `ex_machina` factories for test data.
 - Mock external services with `mox` — never hit real APIs in tests.
-- Use phoenix_test_playwright for happy path which tests both phoenix and svelte
+
+### E2E / Happy-path tests (mandatory)
+Every happy-path and critical-path user flow **must** have an E2E test using `phoenix_test_playwright`.
+This is the only way to test flows that span both the Phoenix LiveView layer and Svelte components,
+since Svelte runs in the browser and is invisible to `Phoenix.LiveViewTest`.
+
+**When to write an E2E test (required):**
+- Any user-facing flow that involves a Svelte component (forms, buttons, interactions)
+- Authentication and sign-out flows
+- Any action that changes persistent state a user would immediately see (create, delete, publish)
+
+**Setup:**
+- All E2E tests live in `test/e2e/` and use `JuntosWeb.E2ECase`
+- Tag every E2E test with `@tag :e2e`
+- Run only E2E tests: `mix test --only e2e`
+- Exclude E2E from fast unit runs: `mix test --exclude e2e`
+- Install browser once per machine: `cd assets && npx playwright install chromium --with-deps`
+
+**Writing E2E tests:**
+```elixir
+defmodule JuntosWeb.E2E.MyFlowTest do
+  use JuntosWeb.E2ECase   # wraps PhoenixTest.Playwright.Case
+
+  setup %{conn: conn} do
+    user = create_user()
+    conn = log_in_user(conn, user)   # injects a signed session cookie
+    {:ok, conn: conn, user: user}
+  end
+
+  @tag :e2e
+  test "user can complete the flow", %{conn: conn} do
+    conn
+    |> visit(~p"/some-path")
+    |> fill_in("Label", with: "value")
+    |> click_button("Submit")
+    |> assert_has("p", text: "Success")
+  end
+end
+```
+
+**Key helpers (from `JuntosWeb.E2ECase`):**
+- `log_in_user(conn, user)` — injects authenticated session cookie into browser context
+- `create_user/0,1` — creates a user via `Ash.Seed` (no email sent)
+- `create_conference/2` — creates a conference owned by a user
 
 ## Background Jobs
 - Use Oban only when a task must be deferred or retried.

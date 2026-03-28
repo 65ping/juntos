@@ -58,9 +58,6 @@ jobs:
       - name: Compile (warnings as errors)
         run: mix compile --warnings-as-errors
 
-      - name: Run Elixir tests
-        run: mix test --cover
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -70,6 +67,22 @@ jobs:
 
       - name: Install JS dependencies
         run: cd assets && npm ci
+
+      - name: Restore Playwright browsers cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('assets/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-playwright-
+
+      - name: Install Playwright browsers
+        run: cd assets && npx playwright install chromium --with-deps
+
+      - name: Run Elixir unit tests
+        run: mix test --cover --exclude e2e
+
+      - name: Run E2E tests
+        run: mix test --only e2e
 
       - name: Run JS/Svelte tests
         run: cd assets && npm run test
