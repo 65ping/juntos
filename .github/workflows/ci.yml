@@ -8,7 +8,7 @@ on:
 
 env:
   MIX_ENV: test
-  ELIXIR_VERSION: "1.20"
+  ELIXIR_VERSION: "1.19"
   OTP_VERSION: "28"
 
 jobs:
@@ -18,13 +18,13 @@ jobs:
 
     services:
       postgres:
-        image: postgres:16
+        image: postgres:18
         env:
           POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U postgres"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -58,11 +58,11 @@ jobs:
       - name: Compile (warnings as errors)
         run: mix compile --warnings-as-errors
 
-      - name: Check formatting
-        run: mix format --check-formatted
-
       - name: Run Elixir tests
         run: mix test --cover
+
+      - name: Check formatting
+        run: mix format --check-formatted
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
