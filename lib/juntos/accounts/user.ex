@@ -4,6 +4,7 @@ defmodule Juntos.Accounts.User do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshAuthentication]
 
+  @moduledoc false
   postgres do
     table("users")
     repo(Juntos.Repo)

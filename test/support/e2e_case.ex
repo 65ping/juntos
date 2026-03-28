@@ -9,6 +9,9 @@ defmodule JuntosWeb.E2ECase do
 
   use ExUnit.CaseTemplate
 
+  alias AshAuthentication.Plug.Helpers, as: AuthHelpers
+  alias PhoenixTest.Playwright, as: PlaywrightTest
+
   using do
     quote do
       use PhoenixTest.Playwright.Case, async: false
@@ -34,11 +37,11 @@ defmodule JuntosWeb.E2ECase do
     fake_conn =
       Phoenix.ConnTest.build_conn()
       |> Phoenix.ConnTest.init_test_session(%{})
-      |> AshAuthentication.Plug.Helpers.store_in_session(user_with_token)
+      |> AuthHelpers.store_in_session(user_with_token)
 
     session = Plug.Conn.get_session(fake_conn)
 
-    PhoenixTest.Playwright.add_session_cookie(
+    PlaywrightTest.add_session_cookie(
       conn,
       [value: session],
       JuntosWeb.Endpoint.session_options()

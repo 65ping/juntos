@@ -804,17 +804,21 @@ end
 ```
 
 **Key helpers (from `JuntosWeb.E2ECase`):**
+
 - `log_in_user(conn, user)` — injects authenticated session cookie into browser context
 - `create_user/0,1` — creates a user via `Ash.Seed` (no email sent)
 - `create_conference/2` — creates a conference owned by a user
 
 ## Background Jobs
+
 - Use Oban only when a task must be deferred or retried.
 - Every Oban worker must have a corresponding unit test.
 
 ## Migrations
+
 - Always generate migrations with `mix ash.generate_migrations`.
 - Never hand-write Ecto migrations.
+
 ```
 
 ### 7.2 `.claude/agents.md`
@@ -1300,6 +1304,12 @@ These are derived from the official Elixir anti-pattern guides and must be check
 - **Factory**: All test data created via `ex_machina` factories in `test/support/factory.ex`
 - **Mocks**: External HTTP calls mocked with `bypass` or `mox` — never reach real endpoints
 - **Coverage target**: ~80% (tracked but not enforced as hard gate in CI)
+
+This should pass in local before committing
+
+```
+mix test --cover --exclude e2e
+```
 
 ```elixir
 # Example Ash action test

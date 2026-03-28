@@ -3,6 +3,7 @@ defmodule Juntos.Core.Conference do
     domain: Juntos.Core,
     data_layer: AshPostgres.DataLayer
 
+  @moduledoc false
   postgres do
     table("conferences")
     repo(Juntos.Repo)

@@ -4,6 +4,7 @@ defmodule Juntos.Accounts.Token do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshAuthentication.TokenResource]
 
+  @moduledoc false
   postgres do
     table("tokens")
     repo(Juntos.Repo)

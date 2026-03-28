@@ -105,9 +105,7 @@ defmodule JuntosWeb.DashboardLive do
   end
 
   defp format_errors(%Ash.Error.Invalid{errors: errors}) do
-    errors
-    |> Enum.map(&Exception.message/1)
-    |> Enum.join(", ")
+    Enum.map_join(errors, ", ", &Exception.message/1)
   end
 
   defp build_slug(nil), do: nil
