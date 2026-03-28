@@ -25,7 +25,7 @@ defmodule JuntosWeb.Router do
     sign_in_route(
       register_path: "/register",
       reset_path: "/reset",
-      overrides: [JuntosWeb.AuthOverrides],
+      overrides: [JuntosWeb.AuthOverrides, AshAuthentication.Phoenix.Overrides.Default],
       auth_routes_prefix: "/auth"
     )
 

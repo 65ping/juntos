@@ -25,23 +25,7 @@ defmodule JuntosWeb.TictactoeLive do
     board = socket.assigns.board
 
     if socket.assigns.status == :playing and Enum.at(board, index) == nil do
-      player = socket.assigns.current_player
-      new_board = List.replace_at(board, index, player)
-
-      socket =
-        case check_winner(new_board) do
-          {:winner, winner} ->
-            assign(socket, board: new_board, status: :won, winner: winner)
-
-          :draw ->
-            assign(socket, board: new_board, status: :draw)
-
-          :playing ->
-            next_player = if player == "x", do: "o", else: "x"
-            assign(socket, board: new_board, current_player: next_player)
-        end
-
-      {:noreply, socket}
+      {:noreply, apply_move(socket, index)}
     else
       {:noreply, socket}
     end
@@ -69,6 +53,20 @@ defmodule JuntosWeb.TictactoeLive do
     />
     """
   end
+
+  defp apply_move(socket, index) do
+    player = socket.assigns.current_player
+    new_board = List.replace_at(socket.assigns.board, index, player)
+
+    case check_winner(new_board) do
+      {:winner, winner} -> assign(socket, board: new_board, status: :won, winner: winner)
+      :draw -> assign(socket, board: new_board, status: :draw)
+      :playing -> assign(socket, board: new_board, current_player: next_player(player))
+    end
+  end
+
+  defp next_player("x"), do: "o"
+  defp next_player(_), do: "x"
 
   defp initial_state do
     %{

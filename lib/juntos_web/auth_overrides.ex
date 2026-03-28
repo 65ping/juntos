@@ -1,6 +1,7 @@
 defmodule JuntosWeb.AuthOverrides do
   use AshAuthentication.Phoenix.Overrides
 
+  @moduledoc false
   alias AshAuthentication.Phoenix.{Components, MagicSignInLive, SignInLive}
 
   override SignInLive do

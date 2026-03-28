@@ -98,7 +98,8 @@ defmodule Juntos.MixProject do
       # Test helpers
       {:ex_machina, "~> 2.8", only: :test},
       {:mox, "~> 1.0", only: :test},
-      {:bypass, "~> 2.1", only: :test}
+      {:bypass, "~> 2.1", only: :test},
+      {:phoenix_test_playwright, "~> 0.13", only: :test, runtime: false}
     ]
   end
 

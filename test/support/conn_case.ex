@@ -17,6 +17,8 @@ defmodule JuntosWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  alias AshAuthentication.Plug.Helpers, as: AuthHelpers
+
   using do
     quote do
       @endpoint JuntosWeb.Endpoint
@@ -55,7 +57,7 @@ defmodule JuntosWeb.ConnCase do
 
     conn
     |> Phoenix.ConnTest.init_test_session(%{})
-    |> AshAuthentication.Plug.Helpers.store_in_session(user)
+    |> AuthHelpers.store_in_session(user)
   end
 
   @doc """

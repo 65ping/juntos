@@ -3,6 +3,7 @@ defmodule Juntos.Core.TicketTier do
     domain: Juntos.Core,
     data_layer: AshPostgres.DataLayer
 
+  @moduledoc false
   postgres do
     table("ticket_tiers")
     repo(Juntos.Repo)
