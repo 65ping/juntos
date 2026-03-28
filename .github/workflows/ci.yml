@@ -5,6 +5,7 @@ on:
     branches: [main, dev]
   pull_request:
     branches: [main, dev]
+  workflow_dispatch:
 
 env:
   MIX_ENV: test
@@ -67,6 +68,9 @@ jobs:
 
       - name: Install JS dependencies
         run: cd assets && npm ci
+
+      - name: Build JS/Svelte assets
+        run: cd assets && node build.js
 
       - name: Restore Playwright browsers cache
         uses: actions/cache@v4
