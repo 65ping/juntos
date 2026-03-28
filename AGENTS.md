@@ -492,7 +492,7 @@ mix igniter.new juntos \
   --no-ecto
 ```
 
-> Note: We manage the Ecto adapter manually (SQLite in dev/test, Postgres in prod) so skip the default generator's Ecto flags and configure manually.
+> Note: We manage the Ecto adapter manually (PostgreSQL in dev/test, PostgresSQL in prod) so skip the default generator's Ecto flags and configure manually.
 
 ### 3.2 Dependencies (`mix.exs`)
 
@@ -763,6 +763,7 @@ Create this file. It is automatically read by Claude Code to govern behaviour in
 - Use `Phoenix.LiveViewTest` for LiveView tests.
 - Use `ex_machina` factories for test data.
 - Mock external services with `mox` — never hit real APIs in tests.
+- Use phoenix_test_playwright for happy path which tests both phoenix and svelte
 
 ## Background Jobs
 - Use Oban only when a task must be deferred or retried.
@@ -1010,6 +1011,7 @@ end
 ```
 
 #### What to test in LiveView tests
+
 - Redirect for unauthenticated access (all protected routes)
 - `mount/3`: page renders with correct initial data
 - Each `handle_event/3`: state changes and HTML updates
@@ -1017,6 +1019,7 @@ end
 - Edge cases: not found redirects, empty states
 
 #### What NOT to test in LiveView tests
+
 - Svelte component rendering (that's for Vitest/`@testing-library/svelte`)
 - CSS classes / visual styling
 - Client-side-only interactions (those stay in JS tests)
@@ -1060,6 +1063,7 @@ describe("MyComponent", () => {
 ```
 
 #### What to test in Svelte tests
+
 - Rendering: correct text, labels, counts, status badges
 - Conditional rendering: elements shown/hidden based on props
 - User interactions: clicks and form submissions call the right `live.pushEvent`
