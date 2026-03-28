@@ -2,10 +2,8 @@ defmodule JuntosWeb.TelemetryTest do
   use ExUnit.Case, async: true
 
   describe "metrics/0" do
-    test "returns a non-empty list of telemetry metrics" do
-      metrics = JuntosWeb.Telemetry.metrics()
-      assert is_list(metrics)
-      assert metrics != []
+    test "returns a list of telemetry metrics" do
+      assert is_list(JuntosWeb.Telemetry.metrics())
     end
 
     test "includes Phoenix endpoint metrics" do

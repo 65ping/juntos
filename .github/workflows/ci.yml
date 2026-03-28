@@ -55,9 +55,6 @@ jobs:
       - name: Install dependencies
         run: mix deps.get
 
-      - name: Compile (warnings as errors)
-        run: mix compile --warnings-as-errors
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -67,6 +64,12 @@ jobs:
 
       - name: Install JS dependencies
         run: cd assets && npm ci
+
+      - name: Build JS/Svelte assets
+        run: cd assets && node build.js
+
+      - name: Compile (warnings as errors)
+        run: mix compile --warnings-as-errors
 
       - name: Restore Playwright browsers cache
         uses: actions/cache@v4
