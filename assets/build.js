@@ -10,9 +10,10 @@ const watch = args.includes("--watch")
 const deploy = args.includes("--deploy")
 
 // Resolve phoenix-colocated hooks and deps from the build directory
+const mixEnv = process.env.MIX_ENV || "dev"
 const nodePaths = [
     path.resolve(__dirname, "../deps"),
-    path.resolve(__dirname, "../_build/dev"),
+    path.resolve(__dirname, `../_build/${mixEnv}`),
 ]
 
 let clientConditions = ["svelte", "browser"]
