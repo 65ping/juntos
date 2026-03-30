@@ -61,20 +61,20 @@ defmodule JuntosWeb.ConferenceLive do
           <.status_badge status={@conference.status} />
           <h1
             style="font-family: var(--font-display);"
-            class="text-5xl sm:text-6xl text-stone-900 tracking-tight leading-tight"
+            class="text-5xl sm:text-6xl text-stone-900 dark:text-stone-100 tracking-tight leading-tight"
           >
             {@conference.name}
           </h1>
           <%= if @conference.location do %>
-            <p class="text-stone-500 text-lg">{@conference.location}</p>
+            <p class="text-stone-500 dark:text-stone-400 text-lg">{@conference.location}</p>
           <% end %>
           <%= if @conference.starts_at do %>
-            <p class="text-stone-500">
+            <p class="text-stone-500 dark:text-stone-400">
               {Calendar.strftime(@conference.starts_at, "%B %-d, %Y")}
             </p>
           <% end %>
           <%= if @conference.description do %>
-            <p class="text-stone-600 leading-relaxed max-w-xl mx-auto mt-6">
+            <p class="text-stone-600 dark:text-stone-300 leading-relaxed max-w-xl mx-auto mt-6">
               {@conference.description}
             </p>
           <% end %>

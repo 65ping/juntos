@@ -4,6 +4,7 @@
 @import "tailwindcss" source(none);
 @source "../css";
 @source "../js";
+@source "../svelte";
 @source "../../lib/juntos_web";
 
 /* A Tailwind plugin that makes "hero-#{ICON}" classes available.
@@ -168,6 +169,17 @@ html {
   font-family: var(--font-ui);
   background-color: var(--color-stone-50);
   color: var(--color-stone-900);
+}
+
+[data-theme=dark] html,
+[data-theme=dark] body {
+  background-color: var(--color-stone-950);
+  color: var(--color-stone-50);
+}
+
+/* Display font utility */
+.font-display {
+  font-family: var(--font-display);
 }
 
 /* Glass card primitive */

@@ -38,7 +38,7 @@
   <div class="max-w-4xl mx-auto">
     <h2
       style="font-family: var(--font-display);"
-      class="text-3xl text-stone-900 text-center mb-10"
+      class="text-3xl text-stone-900 dark:text-stone-100 text-center mb-10"
     >
       Tickets
     </h2>
@@ -47,19 +47,19 @@
       {#each tiers as tier (tier.id)}
         <div class="glass-card p-6 flex flex-col gap-4">
           <div>
-            <h3 class="text-lg font-semibold text-stone-900">{tier.name}</h3>
+            <h3 class="text-lg font-semibold text-stone-900 dark:text-stone-100">{tier.name}</h3>
             {#if tier.description}
-              <p class="text-sm text-stone-500 mt-1">{tier.description}</p>
+              <p class="text-sm text-stone-500 dark:text-stone-400 mt-1">{tier.description}</p>
             {/if}
           </div>
 
           <div class="mt-auto">
-            <p style="font-family: var(--font-display);" class="text-3xl text-stone-900">
+            <p style="font-family: var(--font-display);" class="text-3xl text-stone-900 dark:text-stone-100">
               {formatPrice(tier.price_cents)}
             </p>
 
             {#if remainingCount(tier) !== null}
-              <p class="text-xs text-stone-400 mt-1">
+              <p class="text-xs text-stone-400 dark:text-stone-500 mt-1">
                 {remainingCount(tier)} remaining
               </p>
             {/if}

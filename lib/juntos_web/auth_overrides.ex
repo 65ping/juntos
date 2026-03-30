@@ -17,7 +17,7 @@ defmodule JuntosWeb.AuthOverrides do
     set(:href_url, "/")
     set(:image_url, nil)
     set(:dark_image_url, nil)
-    set(:text_class, "text-3xl text-stone-900 tracking-tight")
+    set(:text_class, "font-display text-3xl text-stone-900 tracking-tight")
     set(:text, "Juntos")
   end
 

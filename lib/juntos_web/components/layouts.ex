@@ -34,7 +34,10 @@ defmodule JuntosWeb.Layouts do
     ~H"""
     <header class="sticky top-0 z-50 px-6 py-4 flex items-center justify-between border-b border-stone-200 glass-card rounded-none">
       <a href="/" class="flex items-center gap-2 group">
-        <span style="font-family: var(--font-display);" class="text-xl text-stone-900 tracking-tight">
+        <span
+          style="font-family: var(--font-display);"
+          class="text-xl text-stone-900 dark:text-stone-100 tracking-tight"
+        >
           Juntos
         </span>
         <span class="w-1.5 h-1.5 rounded-full bg-amber-500 mb-0.5 group-hover:bg-amber-400 transition-colors">
@@ -46,13 +49,13 @@ defmodule JuntosWeb.Layouts do
         <%= if @current_user do %>
           <a
             href={~p"/dashboard"}
-            class="text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors px-3 py-1.5 rounded-md hover:bg-stone-100"
+            class="text-sm font-medium text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-stone-100 transition-colors px-3 py-1.5 rounded-md hover:bg-stone-100 dark:hover:bg-stone-800"
           >
             Dashboard
           </a>
           <a
             href={~p"/sign-out"}
-            class="text-sm font-medium text-stone-500 hover:text-stone-700 transition-colors px-3 py-1.5 rounded-md hover:bg-stone-100"
+            class="text-sm font-medium text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition-colors px-3 py-1.5 rounded-md hover:bg-stone-100 dark:hover:bg-stone-800"
           >
             Sign out
           </a>

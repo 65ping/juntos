@@ -52,13 +52,13 @@
 
   function statusClasses(status) {
     const classes = {
-      draft: "bg-stone-100 text-stone-500",
-      cfp_open: "bg-emerald-50 text-emerald-700",
-      cfp_closed: "bg-sky-50 text-sky-700",
-      scheduled: "bg-amber-50 text-amber-700",
-      complete: "bg-stone-100 text-stone-500",
+      draft: "bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400",
+      cfp_open: "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400",
+      cfp_closed: "bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-400",
+      scheduled: "bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400",
+      complete: "bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400",
     };
-    return classes[status] ?? "bg-stone-100 text-stone-500";
+    return classes[status] ?? "bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400";
   }
 </script>
 
@@ -66,7 +66,7 @@
   <div class="flex items-center justify-between mb-10">
     <h1
       style="font-family: var(--font-display);"
-      class="text-3xl text-stone-900 tracking-tight"
+      class="text-3xl text-stone-900 dark:text-stone-100 tracking-tight"
     >
       My Conferences
     </h1>
@@ -83,23 +83,23 @@
       <div class="flex items-center justify-between mb-6">
         <h2
           style="font-family: var(--font-display);"
-          class="text-xl text-stone-900"
+          class="text-xl text-stone-900 dark:text-stone-100"
         >
           New Conference
         </h2>
         <button
           onclick={resetForm}
-          class="text-stone-400 hover:text-stone-600 transition-colors"
+          class="text-stone-400 dark:text-stone-500 hover:text-stone-600 dark:hover:text-stone-300 transition-colors"
           aria-label="Close"
         >
-          ✕
+          <span class="hero-x-mark size-5"></span>
         </button>
       </div>
 
       <form onsubmit={handleSubmit}>
         <div class="grid gap-4 sm:grid-cols-2">
           <div class="sm:col-span-2">
-            <label class="block text-sm font-medium text-stone-700 mb-1.5" for="conf-name">
+            <label class="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1.5" for="conf-name">
               Conference name
             </label>
             <input
@@ -108,45 +108,45 @@
               bind:value={name}
               placeholder="ElixirConf 2026"
               required
-              class="w-full px-3 py-2 text-sm border border-stone-300 rounded-lg focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-colors"
+              class="w-full px-3 py-2 text-sm border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-colors"
             />
           </div>
 
           <div class="sm:col-span-2">
-            <label class="block text-sm font-medium text-stone-700 mb-1.5" for="conf-desc">
-              Description <span class="text-stone-400 font-normal">(optional)</span>
+            <label class="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1.5" for="conf-desc">
+              Description <span class="text-stone-400 dark:text-stone-500 font-normal">(optional)</span>
             </label>
             <textarea
               id="conf-desc"
               bind:value={description}
               rows="3"
               placeholder="A short description of your conference…"
-              class="w-full px-3 py-2 text-sm border border-stone-300 rounded-lg focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-colors resize-none"
+              class="w-full px-3 py-2 text-sm border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-colors resize-none"
             ></textarea>
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-stone-700 mb-1.5" for="conf-location">
-              Location <span class="text-stone-400 font-normal">(optional)</span>
+            <label class="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1.5" for="conf-location">
+              Location <span class="text-stone-400 dark:text-stone-500 font-normal">(optional)</span>
             </label>
             <input
               id="conf-location"
               type="text"
               bind:value={location}
               placeholder="Austin, TX"
-              class="w-full px-3 py-2 text-sm border border-stone-300 rounded-lg focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-colors"
+              class="w-full px-3 py-2 text-sm border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-colors"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-stone-700 mb-1.5" for="conf-starts">
-              Start date <span class="text-stone-400 font-normal">(optional)</span>
+            <label class="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1.5" for="conf-starts">
+              Start date <span class="text-stone-400 dark:text-stone-500 font-normal">(optional)</span>
             </label>
             <input
               id="conf-starts"
               type="date"
               bind:value={startsAt}
-              class="w-full px-3 py-2 text-sm border border-stone-300 rounded-lg focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-colors"
+              class="w-full px-3 py-2 text-sm border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-colors"
             />
           </div>
         </div>
@@ -155,7 +155,7 @@
           <button
             type="button"
             onclick={resetForm}
-            class="px-4 py-2 text-sm font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
+            class="px-4 py-2 text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors"
           >
             Cancel
           </button>
@@ -172,11 +172,11 @@
   {/if}
 
   {#if conferenceList.length === 0}
-    <div class="text-center py-20 text-stone-400">
+    <div class="text-center py-20 text-stone-400 dark:text-stone-500">
       <p style="font-family: var(--font-display);" class="text-2xl mb-2">
         No conferences yet
       </p>
-      <p class="text-sm">Create your first conference above.</p>
+      <p class="text-sm">Click "New conference" to get started.</p>
     </div>
   {:else}
     <div class="space-y-3">
@@ -191,12 +191,15 @@
             <div class="min-w-0">
               <a
                 href="/{conference.slug}"
-                class="font-medium text-stone-900 hover:text-amber-700 transition-colors truncate block"
+                class="font-medium text-stone-900 dark:text-stone-100 hover:text-amber-700 dark:hover:text-amber-400 transition-colors truncate block"
               >
                 {conference.name}
               </a>
               {#if conference.location}
-                <p class="text-xs text-stone-400 mt-0.5">{conference.location}</p>
+                <p class="text-xs text-stone-400 dark:text-stone-500 mt-0.5">{conference.location}</p>
+              {/if}
+              {#if conference.starts_at}
+                <p class="text-xs text-stone-400 dark:text-stone-500 mt-0.5">{conference.starts_at}</p>
               {/if}
             </div>
           </div>
@@ -204,17 +207,17 @@
           <div class="flex items-center gap-2 shrink-0">
             <a
               href="/{conference.slug}"
-              class="p-2 text-stone-400 hover:text-stone-600 hover:bg-stone-100 rounded-md transition-colors"
+              class="p-2 text-stone-400 dark:text-stone-500 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-md transition-colors"
               title="View public page"
             >
-              ↗
+              <span class="hero-arrow-top-right-on-square size-4"></span>
             </a>
             <button
               onclick={() => deleteConference(conference.id, conference.name)}
-              class="p-2 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+              class="p-2 text-stone-400 dark:text-stone-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors"
               title="Delete conference"
             >
-              ✕
+              <span class="hero-x-mark size-4"></span>
             </button>
           </div>
         </div>

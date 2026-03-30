@@ -2,20 +2,29 @@
   <div class="max-w-2xl mx-auto space-y-6">
     <h1
       style="font-family: var(--font-display);"
-      class="text-5xl sm:text-6xl text-stone-900 tracking-tight leading-tight"
+      class="text-5xl sm:text-6xl text-stone-900 dark:text-stone-100 tracking-tight leading-tight"
     >
       Conferences,<br /><em>organized.</em>
     </h1>
-    <p class="text-lg text-stone-500 leading-relaxed max-w-lg mx-auto">
+    <p class="text-lg text-stone-500 dark:text-stone-400 leading-relaxed max-w-lg mx-auto">
       Juntos brings together organizers, speakers, and attendees — from CFP to check-in, in one place.
     </p>
     <div class="flex items-center justify-center gap-4 pt-2">
-      <a
-        href={~p"/sign-in"}
-        class="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-amber-600 hover:bg-amber-500 rounded-lg shadow-sm transition-all hover:-translate-y-px"
-      >
-        Get started <span aria-hidden="true">&rarr;</span>
-      </a>
+      <%= if @current_user do %>
+        <a
+          href={~p"/dashboard"}
+          class="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-amber-600 hover:bg-amber-500 rounded-lg shadow-sm transition-all hover:-translate-y-px"
+        >
+          Go to dashboard <span aria-hidden="true">&rarr;</span>
+        </a>
+      <% else %>
+        <a
+          href={~p"/sign-in"}
+          class="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-amber-600 hover:bg-amber-500 rounded-lg shadow-sm transition-all hover:-translate-y-px"
+        >
+          Get started <span aria-hidden="true">&rarr;</span>
+        </a>
+      <% end %>
     </div>
   </div>
 </section>

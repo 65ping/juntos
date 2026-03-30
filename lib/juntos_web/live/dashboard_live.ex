@@ -100,9 +100,13 @@ defmodule JuntosWeb.DashboardLive do
       "slug" => to_string(c.slug),
       "status" => to_string(c.status),
       "location" => c.location,
+      "starts_at" => format_date(c.starts_at),
       "organizer_id" => c.organizer_id
     }
   end
+
+  defp format_date(nil), do: nil
+  defp format_date(dt), do: Calendar.strftime(dt, "%b %-d, %Y")
 
   defp format_errors(%Ash.Error.Invalid{errors: errors}) do
     Enum.map_join(errors, ", ", &Exception.message/1)
@@ -127,7 +131,7 @@ defmodule JuntosWeb.DashboardLive do
     ~H"""
     <div class="min-h-screen px-6 py-12">
       <div class="max-w-4xl mx-auto">
-        <p class="text-stone-500 text-sm mb-8">{@current_user.email}</p>
+        <p class="text-stone-500 dark:text-stone-400 text-sm mb-8">{@current_user.email}</p>
         <.ConferenceDashboard conferences={@conferences} socket={@socket} />
       </div>
     </div>
