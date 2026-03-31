@@ -1,4 +1,4 @@
-<section class="min-h-[calc(100vh-65px)] flex flex-col items-center justify-center px-6 text-center">
+<section class="min-h-[calc(100vh-200px)] flex flex-col items-center justify-center px-6 py-20 text-center">
   <div class="max-w-2xl mx-auto space-y-6">
     <h1
       style="font-family: var(--font-display);"
@@ -23,6 +23,124 @@
           class="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-amber-600 hover:bg-amber-500 rounded-lg shadow-sm transition-all hover:-translate-y-px"
         >
           Get started <span aria-hidden="true">&rarr;</span>
+        </a>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<section class="px-6 py-20 bg-stone-100/50 dark:bg-stone-900/50 border-y border-stone-200 dark:border-stone-800">
+  <div class="max-w-5xl mx-auto">
+    <h2
+      style="font-family: var(--font-display);"
+      class="text-3xl text-stone-900 dark:text-stone-100 text-center mb-12"
+    >
+      Everything you need to run a conference
+    </h2>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="glass-card p-6 text-center">
+        <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+          <span class="hero-megaphone size-6 text-amber-600 dark:text-amber-400"></span>
+        </div>
+        <h3 class="font-semibold text-stone-900 dark:text-stone-100 mb-2">Call for Papers</h3>
+        <p class="text-sm text-stone-500 dark:text-stone-400">
+          Accept speaker submissions and manage the review process with ease.
+        </p>
+      </div>
+
+      <div class="glass-card p-6 text-center">
+        <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+          <span class="hero-ticket size-6 text-emerald-600 dark:text-emerald-400"></span>
+        </div>
+        <h3 class="font-semibold text-stone-900 dark:text-stone-100 mb-2">Ticketing</h3>
+        <p class="text-sm text-stone-500 dark:text-stone-400">
+          Sell tickets with multiple tiers, early bird pricing, and group discounts.
+        </p>
+      </div>
+
+      <div class="glass-card p-6 text-center">
+        <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-sky-100 dark:bg-sky-900/30 flex items-center justify-center">
+          <span class="hero-calendar-days size-6 text-sky-600 dark:text-sky-400"></span>
+        </div>
+        <h3 class="font-semibold text-stone-900 dark:text-stone-100 mb-2">Schedule</h3>
+        <p class="text-sm text-stone-500 dark:text-stone-400">
+          Build your agenda with tracks, rooms, and time slots that work for everyone.
+        </p>
+      </div>
+
+      <div class="glass-card p-6 text-center">
+        <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center">
+          <span class="hero-qr-code size-6 text-violet-600 dark:text-violet-400"></span>
+        </div>
+        <h3 class="font-semibold text-stone-900 dark:text-stone-100 mb-2">Check-in</h3>
+        <p class="text-sm text-stone-500 dark:text-stone-400">
+          Fast QR code check-in with real-time attendance tracking on event day.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="px-6 py-20">
+  <div class="max-w-4xl mx-auto">
+    <h2
+      style="font-family: var(--font-display);"
+      class="text-3xl text-stone-900 dark:text-stone-100 text-center mb-12"
+    >
+      How it works
+    </h2>
+
+    <div class="grid sm:grid-cols-3 gap-8">
+      <div class="text-center">
+        <div class="w-10 h-10 mx-auto mb-4 rounded-full bg-stone-200 dark:bg-stone-800 flex items-center justify-center text-stone-600 dark:text-stone-300 font-semibold">
+          1
+        </div>
+        <h3 class="font-semibold text-stone-900 dark:text-stone-100 mb-2">
+          Create your conference
+        </h3>
+        <p class="text-sm text-stone-500 dark:text-stone-400">
+          Set up your event in minutes with all the details attendees need to know.
+        </p>
+      </div>
+
+      <div class="text-center">
+        <div class="w-10 h-10 mx-auto mb-4 rounded-full bg-stone-200 dark:bg-stone-800 flex items-center justify-center text-stone-600 dark:text-stone-300 font-semibold">
+          2
+        </div>
+        <h3 class="font-semibold text-stone-900 dark:text-stone-100 mb-2">Open your CFP</h3>
+        <p class="text-sm text-stone-500 dark:text-stone-400">
+          Invite speakers to submit proposals and review them with your team.
+        </p>
+      </div>
+
+      <div class="text-center">
+        <div class="w-10 h-10 mx-auto mb-4 rounded-full bg-stone-200 dark:bg-stone-800 flex items-center justify-center text-stone-600 dark:text-stone-300 font-semibold">
+          3
+        </div>
+        <h3 class="font-semibold text-stone-900 dark:text-stone-100 mb-2">
+          Sell tickets & go live
+        </h3>
+        <p class="text-sm text-stone-500 dark:text-stone-400">
+          Publish your schedule, start selling tickets, and check in attendees on the day.
+        </p>
+      </div>
+    </div>
+
+    <div class="text-center mt-12">
+      <%= if @current_user do %>
+        <a
+          href={~p"/dashboard"}
+          class="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-stone-700 dark:text-stone-200 bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 rounded-lg transition-colors"
+        >
+          Go to dashboard <span aria-hidden="true">&rarr;</span>
+        </a>
+      <% else %>
+        <a
+          href={~p"/sign-in"}
+          class="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-stone-700 dark:text-stone-200 bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 rounded-lg transition-colors"
+        >
+          Start organizing for free <span aria-hidden="true">&rarr;</span>
         </a>
       <% end %>
     </div>

@@ -4,7 +4,7 @@ defmodule JuntosWeb.CoreComponentsTest do
   use Phoenix.Component
 
   import Phoenix.LiveViewTest,
-    only: [rendered_to_string: 1, render_component: 2, render_component: 3]
+    only: [rendered_to_string: 1, render_component: 2]
 
   import JuntosWeb.CoreComponents
 

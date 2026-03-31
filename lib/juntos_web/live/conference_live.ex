@@ -56,7 +56,7 @@ defmodule JuntosWeb.ConferenceLive do
   def render(assigns) do
     ~H"""
     <div class="min-h-screen">
-      <section class="px-6 py-20 sm:py-32 text-center border-b border-stone-200">
+      <section class="px-6 py-20 sm:py-32 text-center border-b border-stone-200 dark:border-stone-800">
         <div class="max-w-3xl mx-auto space-y-4">
           <.status_badge status={@conference.status} />
           <h1
@@ -101,11 +101,20 @@ defmodule JuntosWeb.ConferenceLive do
     """
   end
 
-  defp status_classes(:draft), do: "bg-stone-100 text-stone-500"
-  defp status_classes(:cfp_open), do: "bg-emerald-50 text-emerald-700"
-  defp status_classes(:cfp_closed), do: "bg-sky-50 text-sky-700"
-  defp status_classes(:scheduled), do: "bg-amber-50 text-amber-700"
-  defp status_classes(:complete), do: "bg-stone-100 text-stone-500"
+  defp status_classes(:draft),
+    do: "bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400"
+
+  defp status_classes(:cfp_open),
+    do: "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400"
+
+  defp status_classes(:cfp_closed),
+    do: "bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-400"
+
+  defp status_classes(:scheduled),
+    do: "bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400"
+
+  defp status_classes(:complete),
+    do: "bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400"
 
   defp status_label(:draft), do: "Draft"
   defp status_label(:cfp_open), do: "CFP Open"

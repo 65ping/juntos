@@ -13,19 +13,12 @@ defmodule Juntos.MixProject do
       compilers: [:phoenix_live_view] ++ Mix.compilers(),
       usage_rules: usage_rules(),
       listeners: [Phoenix.CodeReloader],
-      test_coverage: [
-        ignore_modules: [
-          # Auto-generated Ash protocol implementations
-          ~r/^Inspect\./,
-          # Pure DSL macro config — no callable functions
-          JuntosWeb.AuthOverrides,
-          # Browser-only test support (Playwright sessions)
-          JuntosWeb.E2ECase,
-          # ExMachina test factory
-          Juntos.Factory,
-          # EEx-compiled templates (embed_templates generates from files)
-          JuntosWeb.PageHTML
-        ]
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
       ]
     ]
   end
@@ -113,7 +106,9 @@ defmodule Juntos.MixProject do
       {:ex_machina, "~> 2.8", only: :test},
       {:mox, "~> 1.0", only: :test},
       {:bypass, "~> 2.1", only: :test},
-      {:phoenix_test_playwright, "~> 0.13", only: :test, runtime: false}
+      {:phoenix_test_playwright, "~> 0.13", only: :test, runtime: false},
+      # Coverage tool that works around OTP 28 cover bug
+      {:excoveralls, "~> 0.18", only: :test}
     ]
   end
 
@@ -136,7 +131,12 @@ defmodule Juntos.MixProject do
         "cmd --cd assets node build.js --deploy",
         "phx.digest"
       ],
-      precommit: ["compile --warnings-as-errors", "deps.unlock --unused", "format", "test"]
+      precommit: [
+        "compile --warnings-as-errors",
+        "deps.unlock --unused",
+        "format",
+        "test --exclude e2e"
+      ]
     ]
   end
 

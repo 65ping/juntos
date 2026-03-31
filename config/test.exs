@@ -1,5 +1,9 @@
 import Config
 
+# Disable protocol consolidation to fix OTP 28 cover tool compatibility
+# The cover tool can't handle consolidated protocol beam files
+config :elixir, consolidate_protocols: false
+
 config :juntos, Juntos.Repo,
   username: "postgres",
   password: "postgres",

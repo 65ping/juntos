@@ -181,43 +181,52 @@
   {:else}
     <div class="space-y-3">
       {#each conferenceList as conference (conference.id)}
-        <div class="glass-card px-6 py-5 flex items-center justify-between gap-4">
+        <div class="glass-card px-6 py-5 flex items-center justify-between gap-4 group hover:shadow-md transition-shadow">
           <div class="flex items-center gap-4 min-w-0">
-            <span
-              class="inline-block px-2.5 py-1 text-xs font-semibold uppercase tracking-widest rounded-full shrink-0 {statusClasses(conference.status)}"
-            >
-              {statusLabel(conference.status)}
-            </span>
             <div class="min-w-0">
-              <a
-                href="/{conference.slug}"
-                class="font-medium text-stone-900 dark:text-stone-100 hover:text-amber-700 dark:hover:text-amber-400 transition-colors truncate block"
-              >
-                {conference.name}
-              </a>
-              {#if conference.location}
-                <p class="text-xs text-stone-400 dark:text-stone-500 mt-0.5">{conference.location}</p>
-              {/if}
-              {#if conference.starts_at}
-                <p class="text-xs text-stone-400 dark:text-stone-500 mt-0.5">{conference.starts_at}</p>
-              {/if}
+              <div class="flex items-center gap-3 mb-1">
+                <a
+                  href="/{conference.slug}"
+                  class="font-medium text-stone-900 dark:text-stone-100 hover:text-amber-700 dark:hover:text-amber-400 transition-colors truncate"
+                >
+                  {conference.name}
+                </a>
+                <span
+                  class="inline-block px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider rounded-full shrink-0 {statusClasses(conference.status)}"
+                >
+                  {statusLabel(conference.status)}
+                </span>
+              </div>
+              <div class="flex items-center gap-3 text-xs text-stone-400 dark:text-stone-500">
+                {#if conference.location}
+                  <span>{conference.location}</span>
+                {/if}
+                {#if conference.location && conference.starts_at}
+                  <span>·</span>
+                {/if}
+                {#if conference.starts_at}
+                  <span>{conference.starts_at}</span>
+                {/if}
+              </div>
             </div>
           </div>
 
-          <div class="flex items-center gap-2 shrink-0">
+          <div class="flex items-center gap-1 shrink-0">
             <a
               href="/{conference.slug}"
               class="p-2 text-stone-400 dark:text-stone-500 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-md transition-colors"
               title="View public page"
+              aria-label="View {conference.name} public page"
             >
               <span class="hero-arrow-top-right-on-square size-4"></span>
             </a>
             <button
               onclick={() => deleteConference(conference.id, conference.name)}
-              class="p-2 text-stone-400 dark:text-stone-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors"
+              class="p-2 text-stone-300 dark:text-stone-600 opacity-0 group-hover:opacity-100 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-all"
               title="Delete conference"
+              aria-label="Delete {conference.name}"
             >
-              <span class="hero-x-mark size-4"></span>
+              <span class="hero-trash size-4"></span>
             </button>
           </div>
         </div>
