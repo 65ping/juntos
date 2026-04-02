@@ -17,6 +17,11 @@ config :juntos, :ash_domains, [Juntos.Accounts, Juntos.Core]
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we can use it
 # to bundle .js and .css sources.
+# LiveVue dev configuration
+config :live_vue,
+  vite_host: "http://localhost:5173",
+  ssr_module: LiveVue.SSR.ViteJS
+
 config :juntos, JuntosWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
@@ -26,8 +31,7 @@ config :juntos, JuntosWeb.Endpoint,
   debug_errors: true,
   secret_key_base: "3hl3gHQi+GfGbobxc0pU9/7r6b2izXNBqCRBbbHaCoWIra0R0QQwKKYVBfPsnp0A",
   watchers: [
-    node: ["build.js", "--watch", cd: Path.expand("../assets", __DIR__)],
-    tailwind: {Tailwind, :install_and_run, [:juntos, ~w(--watch)]}
+    npm: ["run", "dev", cd: Path.expand("..", __DIR__)]
   ]
 
 # ## SSL Support
@@ -65,8 +69,8 @@ config :juntos, JuntosWeb.Endpoint,
       # Router, Controllers, LiveViews and LiveComponents
       ~r"lib/juntos_web/router\.ex$",
       ~r"lib/juntos_web/(controllers|live|components)/.*\.(ex|heex)$",
-      # Svelte components
-      ~r"assets/svelte/.*\.svelte$"
+      # Vue components
+      ~r"assets/vue/.*\.vue$"
     ]
   ]
 

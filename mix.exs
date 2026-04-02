@@ -81,7 +81,7 @@ defmodule Juntos.MixProject do
       {:postgrex, ">= 0.0.0"},
 
       # UI
-      {:live_svelte, "~> 0.14"},
+      {:live_vue, "~> 1.0"},
       {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
       {:heroicons,
@@ -124,11 +124,11 @@ defmodule Juntos.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.setup": ["tailwind.install --if-missing", "cmd --cd assets npm install"],
-      "assets.build": ["compile", "tailwind juntos", "cmd --cd assets node build.js"],
+      "assets.setup": ["cmd npm install"],
+      "assets.build": ["compile", "cmd npm run build"],
       "assets.deploy": [
-        "tailwind juntos --minify",
-        "cmd --cd assets node build.js --deploy",
+        "cmd npm run build",
+        "cmd npm run build -- --ssrManifest --emptyOutDir false --ssr assets/js/server.js --outDir priv/static",
         "phx.digest"
       ],
       precommit: [

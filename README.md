@@ -1,5 +1,9 @@
 # Juntos
 
+A conference management application built with Phoenix LiveView and Vue.js via [LiveVue](https://hexdocs.pm/live_vue).
+
+## Getting Started
+
 To start your Phoenix server:
 
 * Run `mix setup` to install and setup dependencies
@@ -9,6 +13,13 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
+## Technology Stack
+
+* **Backend**: Elixir, Phoenix LiveView, Ash Framework
+* **Frontend**: Vue.js 3 via LiveVue for reactive components
+* **Database**: PostgreSQL with Ash Postgres
+* **Styling**: Tailwind CSS
+
 ## Learn more
 
 * Official website: https://www.phoenixframework.org/
@@ -16,3 +27,4 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
 * Docs: https://hexdocs.pm/phoenix
 * Forum: https://elixirforum.com/c/phoenix-forum
 * Source: https://github.com/phoenixframework/phoenix
+* LiveVue: https://hexdocs.pm/live_vue

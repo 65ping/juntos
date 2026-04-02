@@ -1,14 +1,16 @@
 import { defineConfig } from 'vitest/config'
-import { svelte } from '@sveltejs/vite-plugin-svelte'
+import vue from '@vitejs/plugin-vue'
+import { resolve, dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
-  plugins: [svelte({ hot: !process.env.VITEST })],
-  resolve: {
-    conditions: ['svelte', 'browser']
-  },
+  plugins: [vue()],
   test: {
     environment: 'jsdom',
     globals: true,
-    setupFiles: './test/setup.js'
+    setupFiles: resolve(__dirname, './test/setup.js'),
+    include: [resolve(__dirname, './test/**/*.test.js')]
   }
 })

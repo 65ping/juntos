@@ -1,4 +1,7 @@
-import * as Components from "../svelte/**/*.svelte"
-import {getRender} from "live_svelte"
+import components from "../vue"
+import { getRender, loadManifest } from "live_vue/server"
 
-export const render = getRender(Components)
+// present only in prod build. Returns empty obj if doesn't exist
+// used to render preload links
+const manifest = loadManifest("../priv/static/.vite/ssr-manifest.json")
+export const render = getRender(components, manifest)

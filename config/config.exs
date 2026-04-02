@@ -41,9 +41,11 @@ config :juntos, JuntosWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :juntos, Juntos.Mailer, adapter: Swoosh.Adapters.Local
 
-# esbuild version still needed by the Elixir esbuild package (used for dep watchers)
-# JS bundling itself is handled via assets/build.js (required for live_svelte plugins)
-config :esbuild, :version, "0.25.4"
+# LiveVue configuration
+config :live_vue, :ssr, true
+
+# Phoenix Vite configuration for LiveVue
+config :phoenix_vite, PhoenixVite.Npm, assets: [args: [], cd: __DIR__]
 
 # Configure tailwind (the version is required)
 config :tailwind,

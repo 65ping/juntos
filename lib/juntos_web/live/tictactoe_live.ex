@@ -1,8 +1,6 @@
 defmodule JuntosWeb.TictactoeLive do
   use JuntosWeb, :live_view
 
-  import LiveSvelte
-
   @winning_lines [
     [0, 1, 2],
     [3, 4, 5],
@@ -39,17 +37,12 @@ defmodule JuntosWeb.TictactoeLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <.svelte
-      name="TicTacToe"
-      props={
-        %{
-          board: @board,
-          current_player: @current_player,
-          status: Atom.to_string(@status),
-          winner: @winner
-        }
-      }
-      socket={@socket}
+    <.TicTacToe
+      board={@board}
+      current_player={@current_player}
+      status={Atom.to_string(@status)}
+      winner={@winner}
+      v-socket={@socket}
     />
     """
   end

@@ -59,12 +59,19 @@ defmodule JuntosWeb.AuthOverrides do
       "w-full px-3 py-2 text-sm border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-colors"
     )
 
+    set(:submit_label, "Send sign-in link")
+    set(:input_debounce, 300)
+  end
+
+  override Components.Password.Input do
+    set(
+      :identity_input_class,
+      "w-full px-3 py-2 text-sm border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-colors"
+    )
+
     set(
       :submit_class,
       "w-full px-4 py-2.5 text-sm font-medium text-white bg-amber-600 hover:bg-amber-500 rounded-lg shadow-sm transition-all hover:-translate-y-px mt-4"
     )
-
-    set(:submit_label, "Send sign-in link")
-    set(:input_debounce, 300)
   end
 end

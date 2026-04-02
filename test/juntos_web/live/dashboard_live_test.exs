@@ -87,7 +87,10 @@ defmodule JuntosWeb.DashboardLiveTest do
 
       render_hook(view, "delete_conference", %{"id" => conf.id})
 
-      refute render(view) =~ "ToDelete"
+      # LiveVue uses JSON diffs, so verify deletion via database and diff
+      assert {:error, _} = Ash.get(Juntos.Core.Conference, conf.id)
+      # The diff should contain a remove operation for the conference
+      assert render(view) =~ "remove"
     end
 
     test "cannot delete another user's conference", %{conn: conn} do

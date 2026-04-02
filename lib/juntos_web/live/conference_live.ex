@@ -1,6 +1,5 @@
 defmodule JuntosWeb.ConferenceLive do
   use JuntosWeb, :live_view
-  use LiveSvelte.Components
 
   alias Juntos.Core.Conference
   alias Juntos.Core.TicketTier
@@ -82,7 +81,7 @@ defmodule JuntosWeb.ConferenceLive do
       </section>
 
       <%= if @ticket_tiers != [] do %>
-        <.ConferenceTickets ticket_tiers={@ticket_tiers} socket={@socket} />
+        <.ConferenceTickets ticket_tiers={@ticket_tiers} v-socket={@socket} />
       <% end %>
     </div>
     """

@@ -2,38 +2,25 @@
 // to get started and then uncomment the line below.
 // import "./user_socket.js"
 
-// You can include dependencies in two ways.
-//
-// The simplest option is to put them in assets/vendor and
-// import them using relative paths:
-//
-//     import "../vendor/some-package.js"
-//
-// Alternatively, you can `npm install some-package --prefix assets` and import
-// them using a path starting with the package name:
-//
-//     import "some-package"
-//
-// If you have dependencies that try to import CSS, esbuild will generate a separate `app.css` file.
-// To load it, simply add a second `<link>` to your `root.html.heex` file.
+// Import Tailwind CSS
+import "../css/app.css"
 
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
-import {hooks as colocatedHooks} from "phoenix-colocated/juntos"
-import topbar from "../vendor/topbar"
+import topbar from "topbar"
 
-// live_svelte integration
-import {getHooks} from "live_svelte"
-import * as Components from "../svelte/**/*.svelte"
+// live_vue integration
+import {getHooks} from "live_vue"
+import liveVueApp from "../vue"
 
 const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 const liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
   params: {_csrf_token: csrfToken},
-  hooks: {...colocatedHooks, ...getHooks(Components)},
+  hooks: {...getHooks(liveVueApp)},
 })
 
 // Show progress bar on live navigation and form submits
@@ -56,7 +43,7 @@ window.liveSocket = liveSocket
 //     1. stream server logs to the browser console
 //     2. click on elements to jump to their definitions in your code editor
 //
-if (process.env.NODE_ENV === "development") {
+if (import.meta.env.DEV) {
   window.addEventListener("phx:live_reload:attached", ({detail: reloader}) => {
     // Enable server log streaming to client.
     // Disable with reloader.disableServerLogs()
@@ -84,4 +71,3 @@ if (process.env.NODE_ENV === "development") {
     window.liveReloader = reloader
   })
 }
-

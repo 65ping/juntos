@@ -82,6 +82,13 @@ defmodule JuntosWeb do
       # Translation
       use Gettext, backend: JuntosWeb.Gettext
 
+      # Add support for Vue components
+      use LiveVue
+
+      # Generate component for each vue file, so you can use <.ComponentName> syntax
+      # instead of <.vue v-component="ComponentName">
+      use LiveVue.Components, vue_root: ["./assets/vue", "./lib/juntos_web"]
+
       # HTML escaping functionality
       import Phoenix.HTML
       # Core UI components

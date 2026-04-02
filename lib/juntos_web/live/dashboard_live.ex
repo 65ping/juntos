@@ -1,6 +1,5 @@
 defmodule JuntosWeb.DashboardLive do
   use JuntosWeb, :live_view
-  use LiveSvelte.Components
 
   require Ash.Query
 
@@ -132,7 +131,7 @@ defmodule JuntosWeb.DashboardLive do
     <div class="min-h-screen px-6 py-12">
       <div class="max-w-4xl mx-auto">
         <p class="text-stone-500 dark:text-stone-400 text-sm mb-8">{@current_user.email}</p>
-        <.ConferenceDashboard conferences={@conferences} socket={@socket} />
+        <.ConferenceDashboard conferences={@conferences} v-socket={@socket} />
       </div>
     </div>
     """
