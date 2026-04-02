@@ -47,17 +47,6 @@ config :live_vue, :ssr, true
 # Phoenix Vite configuration for LiveVue
 config :phoenix_vite, PhoenixVite.Npm, assets: [args: [], cd: __DIR__]
 
-# Configure tailwind (the version is required)
-config :tailwind,
-  version: "4.1.12",
-  juntos: [
-    args: ~w(
-      --input=assets/css/app.css
-      --output=priv/static/assets/css/app.css
-    ),
-    cd: Path.expand("..", __DIR__)
-  ]
-
 # Configure Elixir's Logger
 config :logger, :default_formatter,
   format: "$time $metadata[$level] $message\n",
