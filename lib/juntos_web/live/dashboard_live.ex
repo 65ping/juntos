@@ -5,6 +5,7 @@ defmodule JuntosWeb.DashboardLive do
 
   alias Juntos.Core.Conference
 
+  @impl true
   def mount(_params, _session, socket) do
     conferences =
       if connected?(socket) do
@@ -21,6 +22,7 @@ defmodule JuntosWeb.DashboardLive do
      |> assign(:conferences, conferences)}
   end
 
+  @impl true
   def handle_event("create_conference", %{"conference" => params}, socket) do
     current_user = socket.assigns.current_user
 
@@ -60,8 +62,14 @@ defmodule JuntosWeb.DashboardLive do
         {:noreply, put_flash(socket, :error, "Conference not found.")}
 
       {:ok, conference} ->
-        Ash.destroy!(conference)
-        {:noreply, assign(socket, :conferences, reload_conferences(current_user.id))}
+        case Ash.destroy(conference) do
+          :ok ->
+            {:noreply, assign(socket, :conferences, reload_conferences(current_user.id))}
+
+          {:error, _} ->
+            {:noreply,
+             put_flash(socket, :error, "Could not delete conference. Please try again.")}
+        end
 
       {:error, _} ->
         {:noreply, put_flash(socket, :error, "Could not delete conference. Please try again.")}
@@ -126,6 +134,7 @@ defmodule JuntosWeb.DashboardLive do
     end
   end
 
+  @impl true
   def render(assigns) do
     ~H"""
     <div class="min-h-screen px-6 py-12">

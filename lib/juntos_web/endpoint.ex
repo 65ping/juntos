@@ -8,6 +8,7 @@ defmodule JuntosWeb.Endpoint do
     store: :cookie,
     key: "_juntos_key",
     signing_salt: "pQYZa0Qx",
+    encryption_salt: "JTm8kn2PxQ3v",
     same_site: "Lax"
   ]
 

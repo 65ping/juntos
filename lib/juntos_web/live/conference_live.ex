@@ -4,23 +4,33 @@ defmodule JuntosWeb.ConferenceLive do
   alias Juntos.Core.Conference
   alias Juntos.Core.TicketTier
 
+  @impl true
   def mount(%{"slug" => slug}, _session, socket) do
-    case load_conference(slug) do
-      {:ok, nil} ->
-        {:ok, push_navigate(socket, to: ~p"/")}
+    if connected?(socket) do
+      case load_conference(slug) do
+        {:ok, nil} ->
+          {:ok, push_navigate(socket, to: ~p"/")}
 
-      {:ok, conference} ->
-        {:ok,
-         socket
-         |> assign(:page_title, conference.name)
-         |> assign(:conference, conference)
-         |> assign(:ticket_tiers, serialize_tiers(conference.ticket_tiers))}
+        {:ok, conference} ->
+          {:ok,
+           socket
+           |> assign(:page_title, conference.name)
+           |> assign(:conference, conference)
+           |> assign(:ticket_tiers, serialize_tiers(conference.ticket_tiers))}
 
-      {:error, _} ->
-        {:ok, push_navigate(socket, to: ~p"/")}
+        {:error, _} ->
+          {:ok, push_navigate(socket, to: ~p"/")}
+      end
+    else
+      {:ok,
+       socket
+       |> assign(:page_title, "Loading...")
+       |> assign(:conference, nil)
+       |> assign(:ticket_tiers, [])}
     end
   end
 
+  @impl true
   def handle_event("get_ticket", %{"tier_id" => _tier_id}, socket) do
     {:noreply, put_flash(socket, :info, "Ticket purchase coming soon!")}
   end
@@ -52,38 +62,45 @@ defmodule JuntosWeb.ConferenceLive do
     }
   end
 
+  @impl true
   def render(assigns) do
     ~H"""
-    <div class="min-h-screen">
-      <section class="px-6 py-20 sm:py-32 text-center border-b border-stone-200 dark:border-stone-800">
-        <div class="max-w-3xl mx-auto space-y-4">
-          <.status_badge status={@conference.status} />
-          <h1
-            style="font-family: var(--font-display);"
-            class="text-5xl sm:text-6xl text-stone-900 dark:text-stone-100 tracking-tight leading-tight"
-          >
-            {@conference.name}
-          </h1>
-          <%= if @conference.location do %>
-            <p class="text-stone-500 dark:text-stone-400 text-lg">{@conference.location}</p>
-          <% end %>
-          <%= if @conference.starts_at do %>
-            <p class="text-stone-500 dark:text-stone-400">
-              {Calendar.strftime(@conference.starts_at, "%B %-d, %Y")}
-            </p>
-          <% end %>
-          <%= if @conference.description do %>
-            <p class="text-stone-600 dark:text-stone-300 leading-relaxed max-w-xl mx-auto mt-6">
-              {@conference.description}
-            </p>
-          <% end %>
-        </div>
-      </section>
+    <%= if is_nil(@conference) do %>
+      <div class="min-h-screen flex items-center justify-center">
+        <p class="text-stone-500 dark:text-stone-400">Loading...</p>
+      </div>
+    <% else %>
+      <div class="min-h-screen">
+        <section class="px-6 py-20 sm:py-32 text-center border-b border-stone-200 dark:border-stone-800">
+          <div class="max-w-3xl mx-auto space-y-4">
+            <.status_badge status={@conference.status} />
+            <h1
+              style="font-family: var(--font-display);"
+              class="text-5xl sm:text-6xl text-stone-900 dark:text-stone-100 tracking-tight leading-tight"
+            >
+              {@conference.name}
+            </h1>
+            <%= if @conference.location do %>
+              <p class="text-stone-500 dark:text-stone-400 text-lg">{@conference.location}</p>
+            <% end %>
+            <%= if @conference.starts_at do %>
+              <p class="text-stone-500 dark:text-stone-400">
+                {Calendar.strftime(@conference.starts_at, "%B %-d, %Y")}
+              </p>
+            <% end %>
+            <%= if @conference.description do %>
+              <p class="text-stone-600 dark:text-stone-300 leading-relaxed max-w-xl mx-auto mt-6">
+                {@conference.description}
+              </p>
+            <% end %>
+          </div>
+        </section>
 
-      <%= if @ticket_tiers != [] do %>
-        <.ConferenceTickets ticket_tiers={@ticket_tiers} v-socket={@socket} />
-      <% end %>
-    </div>
+        <%= if @ticket_tiers != [] do %>
+          <.ConferenceTickets ticket_tiers={@ticket_tiers} v-socket={@socket} />
+        <% end %>
+      </div>
+    <% end %>
     """
   end
 
