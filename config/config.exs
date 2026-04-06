@@ -10,7 +10,7 @@ import Config
 config :juntos,
   ecto_repos: [Juntos.Repo],
   generators: [timestamp_type: :utc_datetime],
-  ash_domains: [Juntos.Accounts, Juntos.Core]
+  ash_domains: [Juntos.Accounts, Juntos.Core, Juntos.Messaging]
 
 config :juntos, Juntos.Repo, pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 

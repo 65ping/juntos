@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { resolve } from "path";
 
 export default {
-  plugins: [vue(), liveVuePlugin(), tailwindcss()],
+  plugins: [vue(), liveVuePlugin({ entrypoint: "./assets/js/server.js" }), tailwindcss()],
   resolve: {
     alias: {
       "@": resolve(__dirname, "js"),

@@ -13,6 +13,9 @@ defmodule Juntos.Accounts.User do
   attributes do
     uuid_primary_key(:id)
     attribute(:email, :ci_string, allow_nil?: false, public?: true)
+    attribute(:display_name, :string, public?: true)
+    attribute(:bio, :string, public?: true)
+    attribute(:avatar_url, :string, public?: true)
     create_timestamp(:inserted_at)
     update_timestamp(:updated_at)
   end
@@ -23,6 +26,10 @@ defmodule Juntos.Accounts.User do
 
   actions do
     defaults([:read, :destroy])
+
+    update :update_profile do
+      accept([:display_name, :bio, :avatar_url])
+    end
   end
 
   authentication do

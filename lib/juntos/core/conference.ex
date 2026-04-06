@@ -40,6 +40,7 @@ defmodule Juntos.Core.Conference do
   relationships do
     belongs_to :organizer, Juntos.Accounts.User, allow_nil?: false, public?: true
     has_many :ticket_tiers, Juntos.Core.TicketTier, public?: true
+    has_many :sessions, Juntos.Core.Session, public?: true
   end
 
   actions do

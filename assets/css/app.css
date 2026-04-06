@@ -1,6 +1,9 @@
 /* See the Tailwind configuration guide for advanced usage
    https://tailwindcss.com/docs/configuration */
 
+/* Google Fonts — Juntos brand typography (must precede all other rules) */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=JetBrains+Mono:wght@400;500&display=swap');
+
 @import "tailwindcss" source(none);
 @source "../css";
 @source "../js";
@@ -11,8 +14,6 @@
 /* A Tailwind plugin that makes "hero-#{ICON}" classes available.
    The heroicons installation itself is managed by your mix.exs */
 @plugin "../vendor/heroicons";
-
-/* daisyUI - using npm package instead of vendor plugin for Vite/Tailwind v4 compatibility */
 
 /* Add variants based on LiveView classes */
 @custom-variant phx-click-loading (.phx-click-loading&, .phx-click-loading &);
@@ -25,12 +26,41 @@
 /* Make LiveView wrapper divs transparent for layout */
 [data-phx-session], [data-phx-teleported-src] { display: contents }
 
-/* Google Fonts — Juntos brand typography */
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=JetBrains+Mono:wght@400;500&display=swap');
+/* ─── Design tokens ─────────────────────────────────────────────────────────── */
+/*
+ * Extend Tailwind's palette with Juntos brand colors.
+ * These generate bg-brand-*, text-brand-*, border-brand-*, ring-brand-*, etc.
+ * Brand:  deep forest teal (inspired by Wispr Flow's #034f46)
+ * Action: vibrant indigo-blue (inspired by Wispr Flow's #4d65ff) for focus states
+ */
+@theme {
+  /* Brand — forest teal */
+  --color-brand-50:  #eafaf5;
+  --color-brand-100: #cff5e9;
+  --color-brand-200: #a0ecd4;
+  --color-brand-300: #63dcba;
+  --color-brand-400: #2ec49e;
+  --color-brand-500: #0faa85;
+  --color-brand-600: #028c6b;
+  --color-brand-700: #047857;
+  --color-brand-800: #065f46;
+  --color-brand-900: #034f46;
+  --color-brand-950: #01291f;
 
-/* Juntos design tokens */
+  /* Action — indigo-blue for interactive / focus */
+  --color-action-50:  #eef0ff;
+  --color-action-100: #dde2ff;
+  --color-action-200: #c2caff;
+  --color-action-300: #9ca8ff;
+  --color-action-400: #7484ff;
+  --color-action-500: #4d65ff;
+  --color-action-600: #3b52e8;
+  --color-action-700: #2a3db5;
+}
+
+/* ─── CSS custom properties ──────────────────────────────────────────────────── */
 :root {
-  /* Warm stone palette */
+  /* Neutral warm-stone */
   --color-stone-950: #0C0A09;
   --color-stone-900: #1C1917;
   --color-stone-800: #292524;
@@ -42,10 +72,15 @@
   --color-stone-100: #F5F5F4;
   --color-stone-50:  #FAFAF9;
 
-  /* Single amber accent */
-  --color-accent:        #D97706;
-  --color-accent-alt:    #F59E0B;
-  --color-accent-subtle: rgba(217, 119, 6, 0.10);
+  /* Brand accent */
+  --color-brand-main:   #034f46;
+  --color-brand-hover:  #065f46;
+  --color-brand-subtle: rgba(3, 79, 70, 0.08);
+  --color-brand-glow:   rgba(3, 79, 70, 0.20);
+
+  /* Interactive / focus */
+  --color-action:        #4d65ff;
+  --color-action-subtle: rgba(77, 101, 255, 0.12);
 
   /* Semantic */
   --color-success: #059669;
@@ -53,10 +88,10 @@
   --color-info:    #0284C7;
 
   /* Glass surfaces */
-  --glass-light:        rgba(255, 255, 255, 0.72);
-  --glass-dark:         rgba(28, 25, 23, 0.72);
-  --glass-border-light: rgba(0, 0, 0, 0.06);
-  --glass-border-dark:  rgba(255, 255, 255, 0.06);
+  --glass-light:        rgba(255, 255, 255, 0.86);
+  --glass-dark:         rgba(36, 34, 28, 0.88);
+  --glass-border-light: rgba(0, 0, 0, 0.09);
+  --glass-border-dark:  rgba(255, 255, 255, 0.11);
 
   /* Typography */
   --font-display: 'DM Serif Display', Georgia, serif;
@@ -71,14 +106,16 @@
   --radius-full: 9999px;
 
   /* Shadows */
-  --shadow-sm:    0 1px 2px rgba(12, 10, 9, 0.06);
-  --shadow-md:    0 4px 12px rgba(12, 10, 9, 0.08), 0 1px 3px rgba(12, 10, 9, 0.06);
-  --shadow-lg:    0 16px 40px rgba(12, 10, 9, 0.12), 0 4px 12px rgba(12, 10, 9, 0.06);
-  --shadow-glass: 0 8px 32px rgba(12, 10, 9, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  --shadow-sm:    0 1px 3px rgba(12, 10, 9, 0.07), 0 1px 2px rgba(12, 10, 9, 0.04);
+  --shadow-md:    0 4px 16px rgba(12, 10, 9, 0.10), 0 1px 4px rgba(12, 10, 9, 0.06);
+  --shadow-lg:    0 16px 48px rgba(12, 10, 9, 0.13), 0 4px 16px rgba(12, 10, 9, 0.07);
+  --shadow-brand: 0 4px 16px rgba(3, 79, 70, 0.28), 0 1px 4px rgba(3, 79, 70, 0.18);
+  --shadow-glass: 0 2px 8px rgba(12, 10, 9, 0.06), 0 8px 32px rgba(12, 10, 9, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.60);
 
   /* Motion */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-glass:    cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
 
   --duration-instant: 100ms;
   --duration-fast:    150ms;
@@ -86,25 +123,50 @@
   --duration-slow:    350ms;
 }
 
-/* Base font */
+/* ─── Base ───────────────────────────────────────────────────────────────────── */
 html {
   font-family: var(--font-ui);
   background-color: var(--color-stone-50);
   color: var(--color-stone-900);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 [data-theme=dark] html,
 [data-theme=dark] body {
-  background-color: var(--color-stone-950);
-  color: var(--color-stone-50);
+  background-color: #0f0f0c;
+  color: #f2f0e8;
 }
 
-/* Display font utility */
+/* Warm off-white text for dark mode headings (Wispr Flow inspired) */
+[data-theme=dark] h1,
+[data-theme=dark] h2,
+[data-theme=dark] h3 {
+  color: #f2f0e8;
+}
+
+/* ─── Typography utilities ────────────────────────────────────────────────────── */
 .font-display {
   font-family: var(--font-display);
 }
 
-/* Glass card primitive */
+/* Gradient text — used on hero headline accent */
+.text-gradient-brand {
+  background: linear-gradient(135deg, #034f46 0%, #0faa85 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme=dark] .text-gradient-brand {
+  background: linear-gradient(135deg, #2ec49e 0%, #63dcba 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Glass card primitive ───────────────────────────────────────────────────── */
 .glass-card {
   background: var(--glass-light);
   backdrop-filter: blur(20px) saturate(180%);
@@ -117,4 +179,258 @@ html {
 [data-theme=dark] .glass-card {
   background: var(--glass-dark);
   border-color: var(--glass-border-dark);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 2px 12px rgba(0, 0, 0, 0.30),
+    0 8px 32px rgba(0, 0, 0, 0.20);
+}
+
+/* ─── Button components ──────────────────────────────────────────────────────── */
+
+/* Primary — deep forest teal, inspired by Wispr Flow */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: white;
+  background-color: var(--color-brand-main);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-brand);
+  transition:
+    background-color var(--duration-fast),
+    transform var(--duration-fast) var(--ease-out-expo),
+    box-shadow var(--duration-fast);
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-brand-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(3, 79, 70, 0.35), 0 2px 6px rgba(3, 79, 70, 0.20);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-brand);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--color-action);
+  outline-offset: 3px;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Secondary ghost */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-stone-700);
+  background-color: var(--color-stone-100);
+  border-radius: var(--radius-lg);
+  transition:
+    background-color var(--duration-fast),
+    color var(--duration-fast),
+    transform var(--duration-fast) var(--ease-out-expo);
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-ghost:hover {
+  background-color: var(--color-stone-200);
+  color: var(--color-stone-900);
+  transform: translateY(-1px);
+}
+
+.btn-ghost:focus-visible {
+  outline: 2px solid var(--color-action);
+  outline-offset: 3px;
+}
+
+[data-theme=dark] .btn-ghost {
+  color: #d6d4cc;
+  background-color: rgba(255, 255, 255, 0.07);
+}
+
+[data-theme=dark] .btn-ghost:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #f2f0e8;
+}
+
+/* Outlined ghost (for less prominent actions) */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.125rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-brand-main);
+  background-color: transparent;
+  border: 1.5px solid var(--color-brand-main);
+  border-radius: var(--radius-lg);
+  transition:
+    background-color var(--duration-fast),
+    color var(--duration-fast);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-outline:hover {
+  background-color: var(--color-brand-subtle);
+}
+
+.btn-outline:focus-visible {
+  outline: 2px solid var(--color-action);
+  outline-offset: 3px;
+}
+
+[data-theme=dark] .btn-outline {
+  color: #2ec49e;
+  border-color: #2ec49e;
+}
+
+[data-theme=dark] .btn-outline:hover {
+  background-color: rgba(46, 196, 158, 0.10);
+}
+
+/* Danger (delete actions) */
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #dc2626;
+  background-color: transparent;
+  border-radius: var(--radius-md);
+  transition: background-color var(--duration-fast), color var(--duration-fast);
+  cursor: pointer;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+[data-theme=dark] .btn-danger:hover {
+  background-color: rgba(220, 38, 38, 0.12);
+}
+
+/* ─── Feature chip / tag ─────────────────────────────────────────────────────── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.875rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: var(--radius-full);
+  background-color: var(--color-stone-100);
+  color: var(--color-stone-500);
+  border: 1px solid var(--glass-border-light);
+}
+
+[data-theme=dark] .chip {
+  background-color: rgba(255, 255, 255, 0.07);
+  color: #9a9890;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* ─── Form input primitive ───────────────────────────────────────────────────── */
+.input-field {
+  width: 100%;
+  padding: 0.5625rem 0.875rem;
+  font-size: 0.875rem;
+  font-family: var(--font-ui);
+  color: var(--color-stone-900);
+  background-color: white;
+  border: 1.5px solid var(--color-stone-200);
+  border-radius: var(--radius-md);
+  transition:
+    border-color var(--duration-fast),
+    box-shadow var(--duration-fast);
+  outline: none;
+}
+
+.input-field::placeholder {
+  color: var(--color-stone-400);
+}
+
+.input-field:hover {
+  border-color: var(--color-stone-300);
+}
+
+.input-field:focus {
+  border-color: var(--color-brand-main);
+  box-shadow: 0 0 0 3px var(--color-brand-subtle);
+}
+
+.input-field:focus-visible {
+  outline: 2px solid var(--color-action);
+  outline-offset: 1px;
+}
+
+[data-theme=dark] .input-field {
+  color: #f2f0e8;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.10);
+}
+
+[data-theme=dark] .input-field::placeholder {
+  color: #706e68;
+}
+
+[data-theme=dark] .input-field:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+[data-theme=dark] .input-field:focus {
+  border-color: #2ec49e;
+  box-shadow: 0 0 0 3px rgba(46, 196, 158, 0.12);
+}
+
+/* ─── Status badges ──────────────────────────────────────────────────────────── */
+.status-badge {
+  display: inline-block;
+  padding: 0.1875rem 0.75rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  border-radius: var(--radius-full);
+}
+
+/* ─── Section divider gradient ───────────────────────────────────────────────── */
+.section-fade {
+  background: linear-gradient(
+    to bottom,
+    rgba(250, 250, 249, 0) 0%,
+    rgba(245, 245, 244, 0.6) 50%,
+    rgba(250, 250, 249, 0) 100%
+  );
+}
+
+[data-theme=dark] .section-fade {
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 15, 12, 0) 0%,
+    rgba(26, 26, 20, 0.6) 50%,
+    rgba(15, 15, 12, 0) 100%
+  );
 }

@@ -5,5 +5,6 @@ defmodule Juntos.Core do
   resources do
     resource(Juntos.Core.Conference)
     resource(Juntos.Core.TicketTier)
+    resource(Juntos.Core.Session)
   end
 end

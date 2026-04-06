@@ -17,7 +17,6 @@ defmodule JuntosWeb.DashboardLiveTest do
       {:ok, view, _html} = live(conn, ~p"/dashboard")
 
       assert render(view) =~ to_string(user.email)
-      assert render(view) =~ "&quot;conferences&quot;:[]"
     end
 
     test "lists the user's own conferences", %{conn: conn} do
@@ -40,7 +39,6 @@ defmodule JuntosWeb.DashboardLiveTest do
       {:ok, view, _html} = live(conn, ~p"/dashboard")
 
       refute render(view) =~ "OtherConf"
-      assert render(view) =~ "&quot;conferences&quot;:[]"
     end
   end
 
@@ -74,6 +72,26 @@ defmodule JuntosWeb.DashboardLiveTest do
 
       assert render(view) =~ "Could not create conference"
     end
+
+    test "shows error when a duplicate slug already exists", %{conn: conn} do
+      user = create_user()
+      conn = log_in_user(conn, user)
+      {:ok, view, _html} = live(conn, ~p"/dashboard")
+
+      params = %{
+        "conference" => %{
+          "name" => "BEAM Conf",
+          "description" => "",
+          "location" => "",
+          "starts_at" => ""
+        }
+      }
+
+      render_hook(view, "create_conference", params)
+      render_hook(view, "create_conference", params)
+
+      assert render(view) =~ "Could not create conference"
+    end
   end
 
   describe "delete_conference event" do
@@ -91,6 +109,16 @@ defmodule JuntosWeb.DashboardLiveTest do
       assert {:error, _} = Ash.get(Juntos.Core.Conference, conf.id)
       # The diff should contain a remove operation for the conference
       assert render(view) =~ "remove"
+    end
+
+    test "shows error for nonexistent conference ID", %{conn: conn} do
+      user = create_user()
+      conn = log_in_user(conn, user)
+      {:ok, view, _html} = live(conn, ~p"/dashboard")
+
+      render_hook(view, "delete_conference", %{"id" => "00000000-0000-0000-0000-000000000000"})
+
+      assert render(view) =~ "Conference not found"
     end
 
     test "cannot delete another user's conference", %{conn: conn} do

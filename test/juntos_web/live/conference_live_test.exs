@@ -28,27 +28,22 @@ defmodule JuntosWeb.ConferenceLiveTest do
       assert html =~ "A great conf"
     end
 
+    test "renders formatted start date when starts_at is set", %{conn: conn, user: user} do
+      conf = create_conference(user, %{name: "DatedConf", starts_at: ~U[2026-06-15 00:00:00Z]})
+
+      {:ok, _view, html} = live(conn, ~p"/#{conf.slug}")
+
+      assert html =~ "June 15, 2026"
+    end
+
     test "redirects to home for unknown slug", %{conn: conn} do
       assert {:error, {:live_redirect, %{to: "/"}}} = live(conn, ~p"/no-such-conference")
     end
 
-    test "does not show ticket section when no tiers", %{conn: conn, conference: conf} do
+    test "always renders the ConferenceSchedule component", %{conn: conn, conference: conf} do
       {:ok, _view, html} = live(conn, ~p"/#{conf.slug}")
 
-      refute html =~ "ConferenceTickets"
-    end
-
-    test "renders the ConferenceTickets component when tiers exist",
-         %{conn: conn, conference: conf} do
-      Ash.create!(
-        Juntos.Core.TicketTier,
-        %{name: "General", price_cents: 9900, conference_id: conf.id},
-        action: :create
-      )
-
-      {:ok, _view, html} = live(conn, ~p"/#{conf.slug}")
-
-      assert html =~ "ConferenceTickets"
+      assert html =~ "ConferenceSchedule"
     end
   end
 

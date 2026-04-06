@@ -37,10 +37,14 @@ defmodule JuntosWeb.Router do
       layout: {JuntosWeb.Layouts, :app},
       on_mount: [{JuntosWeb.RequireAuth, :default}] do
       live "/dashboard", DashboardLive
+      live "/profile", ProfileLive
+      live "/profile/:user_id", ProfileLive
+      live "/messages/:conversation_id", ConversationLive
     end
 
     ash_authentication_live_session :public,
       layout: {JuntosWeb.Layouts, :app} do
+      live "/conferences", ConferenceDiscoveryLive
       live "/tictactoe", TictactoeLive
       live "/:slug", ConferenceLive
     end

@@ -101,8 +101,6 @@ defmodule Juntos.MixProject do
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
 
       # Test helpers
-      {:ex_machina, "~> 2.8", only: :test},
-      {:mox, "~> 1.0", only: :test},
       {:bypass, "~> 2.1", only: :test},
       {:phoenix_test_playwright, "~> 0.13", only: :test, runtime: false},
       # Coverage tool that works around OTP 28 cover bug

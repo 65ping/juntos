@@ -118,6 +118,10 @@ defmodule JuntosWeb.TictactoeLiveTest do
     end
   end
 
+  # The game state is rendered by a LiveVue (Vue.js) component, so the board
+  # and game status are not accessible via rendered HTML in LiveView tests.
+  # :sys.get_state is used intentionally to assert on socket assigns directly.
+  # This is a known tradeoff with client-side rendering via LiveVue.
   defp get_assigns(view) do
     %{
       board: :sys.get_state(view.pid).socket.assigns.board,

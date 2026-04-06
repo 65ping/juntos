@@ -33,42 +33,71 @@ defmodule JuntosWeb.Layouts do
   def app(assigns) do
     ~H"""
     <div class="min-h-screen flex flex-col">
-      <header class="sticky top-0 z-50 px-6 py-4 flex items-center justify-between border-b border-stone-200 dark:border-stone-800 glass-card rounded-none">
-        <a href="/" class="flex items-center gap-2 group">
+      <header class="sticky top-0 z-50 px-5 sm:px-8 py-0 flex items-center justify-between border-b border-stone-200 dark:border-stone-700/60 glass-card rounded-none h-14">
+        <a href="/" class="flex items-center gap-1.5 group" aria-label="Juntos home">
           <span
             style="font-family: var(--font-display);"
-            class="text-xl text-stone-900 dark:text-stone-100 tracking-tight"
+            class="text-xl text-stone-900 dark:text-stone-100 tracking-tight group-hover:text-brand-800 dark:group-hover:text-brand-400 transition-colors duration-150"
           >
             Juntos
           </span>
-          <span class="w-1.5 h-1.5 rounded-full bg-amber-500 mb-0.5 group-hover:bg-amber-400 transition-colors">
+          <span
+            aria-hidden="true"
+            class="w-1.5 h-1.5 rounded-full bg-brand-700 dark:bg-brand-400 mb-0.5 opacity-80 group-hover:opacity-100 transition-opacity duration-150"
+          >
           </span>
         </a>
 
-        <div class="flex items-center gap-3">
+        <nav class="flex items-center gap-1 sm:gap-2" aria-label="Main navigation">
           <.theme_toggle />
           <%= if @current_user do %>
+            <div class="hidden sm:flex items-center gap-0.5 ml-1">
+              <a
+                href={~p"/conferences"}
+                class="text-sm text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors duration-150 px-2.5 py-1.5 rounded-lg hover:bg-stone-100/80 dark:hover:bg-stone-800/60"
+              >
+                Browse
+              </a>
+              <a
+                href={~p"/dashboard"}
+                class="text-sm text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-stone-100 transition-colors duration-150 px-2.5 py-1.5 rounded-lg hover:bg-stone-100/80 dark:hover:bg-stone-800/60"
+              >
+                Dashboard
+              </a>
+            </div>
+            <div
+              class="w-px h-4 bg-stone-200 dark:bg-stone-700 hidden sm:block mx-1"
+              aria-hidden="true"
+            />
             <a
-              href={~p"/dashboard"}
-              class="text-sm font-medium text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-stone-100 transition-colors px-3 py-1.5 rounded-md hover:bg-stone-100 dark:hover:bg-stone-800"
+              href={~p"/profile"}
+              class="hidden sm:inline-flex items-center justify-center w-7 h-7 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-800 dark:text-brand-400 text-xs font-semibold hover:bg-brand-200 dark:hover:bg-brand-800/80 transition-colors duration-150"
+              aria-label="Your profile"
+              title="Profile"
             >
-              Dashboard
+              {String.first(to_string(@current_user.email)) |> String.upcase()}
             </a>
             <a
               href={~p"/sign-out"}
-              class="text-sm font-medium text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition-colors px-3 py-1.5 rounded-md hover:bg-stone-100 dark:hover:bg-stone-800"
+              class="text-xs text-stone-400 dark:text-stone-500 hover:text-stone-600 dark:hover:text-stone-300 transition-colors duration-150 px-2 py-1.5 rounded-lg hover:bg-stone-100/80 dark:hover:bg-stone-800/60"
             >
               Sign out
             </a>
           <% else %>
             <a
+              href={~p"/conferences"}
+              class="hidden sm:inline-flex text-sm text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors duration-150 px-2.5 py-1.5 rounded-lg hover:bg-stone-100/80 dark:hover:bg-stone-800/60 ml-1"
+            >
+              Browse
+            </a>
+            <a
               href={~p"/sign-in"}
-              class="text-sm font-medium text-white bg-amber-600 hover:bg-amber-500 transition-colors px-4 py-2 rounded-md shadow-sm"
+              class="inline-flex items-center gap-1.5 px-4 py-1.5 text-sm font-medium text-white bg-brand-800 dark:bg-brand-700 hover:bg-brand-900 dark:hover:bg-brand-600 rounded-full transition-colors duration-150 ml-1"
             >
               Sign in
             </a>
           <% end %>
-        </div>
+        </nav>
       </header>
 
       <main class="flex-1">
@@ -131,37 +160,38 @@ defmodule JuntosWeb.Layouts do
   """
   def theme_toggle(assigns) do
     ~H"""
-    <div class="card relative flex flex-row items-center border-2 border-base-300 bg-base-300 rounded-full">
-      <div class="absolute w-1/3 h-full rounded-full border-1 border-base-200 bg-base-100 brightness-200 left-0 [[data-theme=light]_&]:left-1/3 [[data-theme=dark]_&]:left-2/3 transition-[left]" />
-
+    <div
+      class="relative flex items-center bg-stone-100 dark:bg-stone-800 rounded-full p-0.5"
+      role="group"
+      aria-label="Theme selector"
+    >
+      <div class="absolute top-0.5 bottom-0.5 w-[calc(33.333%-2px)] rounded-full bg-white dark:bg-stone-600 shadow-sm left-[2px] [[data-theme=light]_&]:left-[calc(33.333%+1px)] [[data-theme=dark]_&]:left-[calc(66.667%)] transition-[left] duration-200" />
       <button
-        class="flex p-2 cursor-pointer w-1/3"
+        class="relative flex items-center justify-center p-1.5 w-8 cursor-pointer text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition-colors"
         phx-click={JS.dispatch("phx:set-theme")}
         data-phx-theme="system"
         aria-label="Use system theme"
         title="System"
       >
-        <.icon name="hero-computer-desktop-micro" class="size-4 opacity-75 hover:opacity-100" />
+        <.icon name="hero-computer-desktop-micro" class="size-3.5" />
       </button>
-
       <button
-        class="flex p-2 cursor-pointer w-1/3"
+        class="relative flex items-center justify-center p-1.5 w-8 cursor-pointer text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition-colors"
         phx-click={JS.dispatch("phx:set-theme")}
         data-phx-theme="light"
         aria-label="Use light theme"
         title="Light"
       >
-        <.icon name="hero-sun-micro" class="size-4 opacity-75 hover:opacity-100" />
+        <.icon name="hero-sun-micro" class="size-3.5" />
       </button>
-
       <button
-        class="flex p-2 cursor-pointer w-1/3"
+        class="relative flex items-center justify-center p-1.5 w-8 cursor-pointer text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition-colors"
         phx-click={JS.dispatch("phx:set-theme")}
         data-phx-theme="dark"
         aria-label="Use dark theme"
         title="Dark"
       >
-        <.icon name="hero-moon-micro" class="size-4 opacity-75 hover:opacity-100" />
+        <.icon name="hero-moon-micro" class="size-3.5" />
       </button>
     </div>
     """
@@ -172,45 +202,83 @@ defmodule JuntosWeb.Layouts do
   """
   def footer(assigns) do
     ~H"""
-    <footer class="border-t border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900/50">
-      <div class="max-w-4xl mx-auto px-6 py-10">
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div class="flex items-center gap-2">
-            <span
-              style="font-family: var(--font-display);"
-              class="text-lg text-stone-700 dark:text-stone-300"
-            >
-              Juntos
-            </span>
-            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+    <footer class="border-t border-stone-200 dark:border-stone-700/60 bg-stone-50 dark:bg-stone-900/40">
+      <div class="max-w-5xl mx-auto px-6 py-12">
+        <div class="flex flex-col sm:flex-row items-start justify-between gap-10">
+          <div class="space-y-3">
+            <div class="flex items-center gap-1.5">
+              <span
+                style="font-family: var(--font-display);"
+                class="text-lg text-stone-700 dark:text-stone-300"
+              >
+                Juntos
+              </span>
+              <span
+                aria-hidden="true"
+                class="w-1.5 h-1.5 rounded-full bg-brand-700 dark:bg-brand-400 mb-0.5 opacity-70"
+              >
+              </span>
+            </div>
+            <p class="text-xs text-stone-400 dark:text-stone-500 max-w-[16rem] leading-relaxed">
+              The conference platform for developers who build communities worth gathering around.
+            </p>
           </div>
 
-          <nav class="flex items-center gap-6 text-sm text-stone-500 dark:text-stone-400">
-            <a href="/" class="hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
-              Home
-            </a>
-            <a
-              href="/sign-in"
-              class="hover:text-stone-900 dark:hover:text-stone-100 transition-colors"
-            >
-              Sign in
-            </a>
-          </nav>
+          <div class="flex flex-wrap gap-10 text-sm">
+            <div class="space-y-3">
+              <p class="text-xs font-semibold uppercase tracking-widest text-stone-400 dark:text-stone-500">
+                Platform
+              </p>
+              <nav
+                class="flex flex-col gap-2 text-stone-500 dark:text-stone-400"
+                aria-label="Platform links"
+              >
+                <a
+                  href={~p"/conferences"}
+                  class="hover:text-brand-800 dark:hover:text-brand-400 transition-colors"
+                >
+                  Browse conferences
+                </a>
+                <a
+                  href={~p"/sign-in"}
+                  class="hover:text-brand-800 dark:hover:text-brand-400 transition-colors"
+                >
+                  Sign in
+                </a>
+                <a
+                  href={~p"/sign-in"}
+                  class="hover:text-brand-800 dark:hover:text-brand-400 transition-colors"
+                >
+                  Organize an event
+                </a>
+              </nav>
+            </div>
+            <div class="space-y-3">
+              <p class="text-xs font-semibold uppercase tracking-widest text-stone-400 dark:text-stone-500">
+                Legal
+              </p>
+              <nav
+                class="flex flex-col gap-2 text-stone-500 dark:text-stone-400"
+                aria-label="Legal links"
+              >
+                <a href="#" class="hover:text-brand-800 dark:hover:text-brand-400 transition-colors">
+                  Terms
+                </a>
+                <a href="#" class="hover:text-brand-800 dark:hover:text-brand-400 transition-colors">
+                  Privacy
+                </a>
+                <a href="#" class="hover:text-brand-800 dark:hover:text-brand-400 transition-colors">
+                  Contact
+                </a>
+              </nav>
+            </div>
+          </div>
         </div>
 
-        <div class="mt-8 pt-6 border-t border-stone-200 dark:border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-400 dark:text-stone-500">
-          <p>&copy; {Date.utc_today().year} Juntos. All rights reserved.</p>
-          <div class="flex items-center gap-4">
-            <a href="#" class="hover:text-stone-600 dark:hover:text-stone-300 transition-colors">
-              Terms
-            </a>
-            <a href="#" class="hover:text-stone-600 dark:hover:text-stone-300 transition-colors">
-              Privacy
-            </a>
-            <a href="#" class="hover:text-stone-600 dark:hover:text-stone-300 transition-colors">
-              Contact
-            </a>
-          </div>
+        <div class="mt-10 pt-6 border-t border-stone-200 dark:border-stone-700/60 flex items-center justify-center">
+          <p class="text-xs text-stone-400 dark:text-stone-600">
+            &copy; {Date.utc_today().year} Juntos. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

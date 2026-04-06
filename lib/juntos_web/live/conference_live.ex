@@ -2,6 +2,7 @@ defmodule JuntosWeb.ConferenceLive do
   use JuntosWeb, :live_view
 
   alias Juntos.Core.Conference
+  alias Juntos.Core.Session
   alias Juntos.Core.TicketTier
 
   @impl true
@@ -16,7 +17,10 @@ defmodule JuntosWeb.ConferenceLive do
            socket
            |> assign(:page_title, conference.name)
            |> assign(:conference, conference)
-           |> assign(:ticket_tiers, serialize_tiers(conference.ticket_tiers))}
+           |> assign(:ticket_tiers, serialize_tiers(conference.ticket_tiers))
+           |> assign(:sessions, serialize_sessions(conference.sessions))
+           |> assign(:organizer, serialize_organizer(conference.organizer))
+           |> assign(:conference_info, serialize_conference_info(conference))}
 
         {:error, _} ->
           {:ok, push_navigate(socket, to: ~p"/")}
@@ -26,7 +30,10 @@ defmodule JuntosWeb.ConferenceLive do
        socket
        |> assign(:page_title, "Loading...")
        |> assign(:conference, nil)
-       |> assign(:ticket_tiers, [])}
+       |> assign(:ticket_tiers, [])
+       |> assign(:sessions, [])
+       |> assign(:organizer, nil)
+       |> assign(:conference_info, nil)}
     end
   end
 
@@ -41,11 +48,63 @@ defmodule JuntosWeb.ConferenceLive do
       |> Ash.Query.for_read(:read)
       |> Ash.Query.sort(position: :asc)
 
+    sessions_query =
+      Session
+      |> Ash.Query.for_read(:read)
+      |> Ash.Query.sort(day_number: :asc, position: :asc)
+
     Conference
     |> Ash.Query.for_read(:by_slug, %{slug: slug})
-    |> Ash.Query.load(ticket_tiers: tiers_query)
+    |> Ash.Query.load(ticket_tiers: tiers_query, sessions: sessions_query, organizer: [])
     |> Ash.read_one()
   end
+
+  defp serialize_sessions(sessions) do
+    Enum.map(sessions, fn s ->
+      %{
+        "id" => s.id,
+        "title" => s.title,
+        "description" => s.description,
+        "speaker_name" => s.speaker_name,
+        "speaker_bio" => s.speaker_bio,
+        "starts_at" => format_time(s.starts_at),
+        "ends_at" => format_time(s.ends_at),
+        "day_number" => s.day_number,
+        "room" => s.room,
+        "session_type" => to_string(s.session_type),
+        "position" => s.position
+      }
+    end)
+  end
+
+  defp serialize_conference_info(conference) do
+    %{
+      "starts_at" => format_date(conference.starts_at),
+      "ends_at" => format_date(conference.ends_at),
+      "cfp_opens_at" => format_date(conference.cfp_opens_at),
+      "cfp_closes_at" => format_date(conference.cfp_closes_at),
+      "location" => conference.location,
+      "session_count" => length(conference.sessions)
+    }
+  end
+
+  defp format_date(nil), do: nil
+  defp format_date(dt), do: Calendar.strftime(dt, "%B %-d, %Y")
+
+  defp serialize_organizer(nil), do: nil
+
+  defp serialize_organizer(user) do
+    name =
+      case user do
+        %{display_name: n} when is_binary(n) and n != "" -> n
+        %{email: e} -> e |> to_string() |> String.split("@") |> List.first()
+      end
+
+    %{"id" => user.id, "name" => name, "bio" => user.bio, "avatar_url" => user.avatar_url}
+  end
+
+  defp format_time(nil), do: nil
+  defp format_time(dt), do: Calendar.strftime(dt, "%H:%M")
 
   defp serialize_tiers(tiers) do
     Enum.map(tiers, &serialize_tier/1)
@@ -71,7 +130,7 @@ defmodule JuntosWeb.ConferenceLive do
       </div>
     <% else %>
       <div class="min-h-screen">
-        <section class="px-6 py-20 sm:py-32 text-center border-b border-stone-200 dark:border-stone-800">
+        <section class="px-6 py-20 sm:py-32 text-center border-b border-stone-200 dark:border-stone-700/60">
           <div class="max-w-3xl mx-auto space-y-4">
             <.status_badge status={@conference.status} />
             <h1
@@ -96,9 +155,13 @@ defmodule JuntosWeb.ConferenceLive do
           </div>
         </section>
 
-        <%= if @ticket_tiers != [] do %>
-          <.ConferenceTickets ticket_tiers={@ticket_tiers} v-socket={@socket} />
-        <% end %>
+        <.ConferenceSchedule
+          v-socket={@socket}
+          sessions={@sessions}
+          ticket_tiers={@ticket_tiers}
+          organizer={@organizer}
+          conference_info={@conference_info}
+        />
       </div>
     <% end %>
     """
@@ -121,13 +184,13 @@ defmodule JuntosWeb.ConferenceLive do
     do: "bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400"
 
   defp status_classes(:cfp_open),
-    do: "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400"
+    do: "bg-brand-50 dark:bg-brand-950/60 text-brand-800 dark:text-brand-400"
 
   defp status_classes(:cfp_closed),
-    do: "bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-400"
+    do: "bg-stone-100 dark:bg-stone-800/60 text-stone-600 dark:text-stone-400"
 
   defp status_classes(:scheduled),
-    do: "bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400"
+    do: "bg-action-50 dark:bg-action-500/10 text-action-600 dark:text-action-400"
 
   defp status_classes(:complete),
     do: "bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400"
